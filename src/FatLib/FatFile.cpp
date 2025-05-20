@@ -905,7 +905,7 @@ int8_t FatFile::readDir(DirFat_t* dir) {
 // Read next directory entry into the cache.
 // Assumes file is correctly positioned.
 DirFat_t* FatFile::readDirCache(bool skipReadOk) {
-  DBG_HALT_IF(m_curPosition & 0X1F);
+  DBG_HALT_Im_curPosition & 0X1F;
   uint8_t i = (m_curPosition >> 5) & 0XF;
 
   if (i == 0 || !skipReadOk) {

@@ -19,7 +19,7 @@ SdFat sd;
 ArduinoOutStream cout(Serial);
 
 // store error strings in flash to save RAM
-#define error(s) sd.errorHalt(F(s))
+#define error(s) sd.errorHalt(s)
 //------------------------------------------------------------------------------
 void setup() {
   // filename for this example
@@ -32,7 +32,7 @@ void setup() {
     yield();
   }
   // F() stores strings in flash to save RAM
-  cout << endl << F("Type any character to start\n");
+  cout << endl << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }
@@ -43,7 +43,7 @@ void setup() {
     sd.initErrorHalt();
   }
 
-  cout << F("Appending to: ") << name;
+  cout << "Appending to: " << name;
 
   for (uint8_t i = 0; i < 100; i++) {
     // open stream for append

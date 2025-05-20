@@ -129,12 +129,12 @@ class SdBase : public Vol {
    */
   void errorHalt(print_t* pr) {
     if (sdErrorCode()) {
-      pr->print(F("SdError: 0X"));
+      pr->print("SdError: 0X");
       pr->print(sdErrorCode(), HEX);
-      pr->print(F(",0X"));
+      pr->print(",0X");
       pr->println(sdErrorData(), HEX);
     } else if (!Vol::fatType()) {
-      pr->println(F("Check SD format."));
+      pr->println("Check SD format.");
     }
     while (true) {}
   }
@@ -145,7 +145,7 @@ class SdBase : public Vol {
    * \param[in] msg Message to print.
    */
   void errorHalt(print_t* pr, const char* msg) {
-    pr->print(F("error: "));
+    pr->print("error: ");
     pr->println(msg);
     errorHalt(pr);
   }
@@ -156,7 +156,7 @@ class SdBase : public Vol {
    * \param[in] msg Message to print.
    */
   void errorHalt(print_t* pr, const __FlashStringHelper* msg) {
-    pr->print(F("error: "));
+    pr->print("error: ");
     pr->println(msg);
     errorHalt(pr);
   }
@@ -233,11 +233,11 @@ class SdBase : public Vol {
    * \param[in] pr Print destination.
    */
   void initErrorPrint(print_t* pr) {
-    pr->println(F("begin() failed"));
+    pr->println("begin( failed"));
     if (sdErrorCode()) {
-      pr->println(F("Do not reformat the SD."));
+      pr->println("Do not reformat the SD.");
       if (sdErrorCode() == SD_CARD_ERROR_CMD0) {
-        pr->println(F("No card, wrong chip select pin, or wiring error?"));
+        pr->println("No card, wrong chip select pin, or wiring error?");
       }
     }
     errorPrint(pr);
@@ -252,9 +252,9 @@ class SdBase : public Vol {
    */
   void printFatType(print_t* pr) {
     if (Vol::fatType() == FAT_TYPE_EXFAT) {
-      pr->print(F("exFAT"));
+      pr->print("exFAT");
     } else {
-      pr->print(F("FAT"));
+      pr->print("FAT");
       pr->print(Vol::fatType());
     }
   }
@@ -265,12 +265,12 @@ class SdBase : public Vol {
    */
   void errorPrint(print_t* pr) {
     if (sdErrorCode()) {
-      pr->print(F("SdError: 0X"));
+      pr->print("SdError: 0X");
       pr->print(sdErrorCode(), HEX);
-      pr->print(F(",0X"));
+      pr->print(",0X");
       pr->println(sdErrorData(), HEX);
     } else if (!Vol::fatType()) {
-      pr->println(F("Check SD format."));
+      pr->println("Check SD format.");
     }
   }
   //----------------------------------------------------------------------------
@@ -280,7 +280,7 @@ class SdBase : public Vol {
    * \param[in] msg Message to print.
    */
   void errorPrint(print_t* pr, char const* msg) {
-    pr->print(F("error: "));
+    pr->print("error: ");
     pr->println(msg);
     errorPrint(pr);
   }
@@ -291,7 +291,7 @@ class SdBase : public Vol {
    * \param[in] msg Message to print.
    */
   void errorPrint(print_t* pr, const __FlashStringHelper* msg) {
-    pr->print(F("error: "));
+    pr->print("error: ");
     pr->println(msg);
     errorPrint(pr);
   }
@@ -303,16 +303,16 @@ class SdBase : public Vol {
   void printSdError(print_t* pr) {
     if (sdErrorCode()) {
       if (sdErrorCode() == SD_CARD_ERROR_CMD0) {
-        pr->println(F("No card, wrong chip select pin, or wiring error?"));
+        pr->println("No card, wrong chip select pin, or wiring error?");
       }
-      pr->print(F("SD error: "));
+      pr->print("SD error: ");
       printSdErrorSymbol(pr, sdErrorCode());
-      pr->print(F(" = 0x"));
+      pr->print(" = 0x");
       pr->print(sdErrorCode(), HEX);
-      pr->print(F(",0x"));
+      pr->print(",0x");
       pr->println(sdErrorData(), HEX);
     } else if (!Vol::fatType()) {
-      pr->println(F("Check SD format."));
+      pr->println("Check SD format.");
     }
   }
   //----------------------------------------------------------------------------

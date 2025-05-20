@@ -40,7 +40,7 @@ const uint16_t FAT16_ROOT_SECTOR_COUNT =
 #if !PRINT_FORMAT_PROGRESS
 #define writeMsg(str)
 #elif defined(__AVR__)
-#define writeMsg(str) if (m_pr) m_pr->print(F(str))
+#define writeMsg(str) if (m_pr) m_pr->print(str)
 #else  // PRINT_FORMAT_PROGRESS
 #define writeMsg(str) if (m_pr) m_pr->write(str)
 #endif  // PRINT_FORMAT_PROGRESS

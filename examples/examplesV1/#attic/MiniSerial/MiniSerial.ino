@@ -18,9 +18,9 @@ void setup() {
 }
 void loop() {
   int c;
-  MiniSerial.println(F("Type any Character"));
+  MiniSerial.println("Type any Character");
   while ((c = MiniSerial.read()) < 0) {}
-  MiniSerial.print(F("Read: "));
+  MiniSerial.print("Read: ");
   MiniSerial.println((char)c);
   while (MiniSerial.read() >= 0) {}
 }

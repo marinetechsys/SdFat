@@ -22,7 +22,7 @@ SdFile file;
 ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 // store error strings in flash to save RAM
-#define error(s) sd.errorHalt(F(s))
+#define error(s) sd.errorHalt(s)
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
@@ -42,13 +42,13 @@ void loop() {
     delay(10);
   } while (Serial.available() && Serial.read() >= 0);
   // F stores strings in flash to save RAM
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }
   delay(400);  // catch Due reset problem
 
-  cout << F("FreeStack: ") << FreeStack() << endl;
+  cout << "FreeStack: " << FreeStack() << endl;
 
   // Initialize at the highest speed supported by the board that is
   // not over 50 MHz. Try a lower speed if SPI errors occur.
@@ -56,9 +56,9 @@ void loop() {
     sd.initErrorHalt();
   }
 
-  cout << F("Type is FAT") << int(sd.vol()->fatType()) << endl;
+  cout << "Type is FAT" << int(sd.vol()->fatType()) << endl;
 
-  cout << F("Starting print test.  Please wait.\n\n");
+  cout << "Starting print test.  Please wait.\n\n";
 
   // do write test
   for (int test = 0; test < 6; test++) {
@@ -73,26 +73,26 @@ void loop() {
     totalLatency = 0;
     switch(test) {
     case 0:
-      cout << F("Test of println(uint16_t)\n");
+      cout << "Test of println(uint16_t\n");
       break;
 
     case 1:
-      cout << F("Test of printField(uint16_t, char)\n");
+      cout << "Test of printField(uint16_t, char\n");
       break;
 
     case 2:
-      cout << F("Test of println(uint32_t)\n");
+      cout << "Test of println(uint32_t\n");
       break;
 
     case 3:
-      cout << F("Test of printField(uint32_t, char)\n");
+      cout << "Test of printField(uint32_t, char\n");
       break;
     case 4:
-      cout << F("Test of println(float)\n");
+      cout << "Test of println(float\n");
       break;
 
     case 5:
-      cout << F("Test of printField(float, char)\n");
+      cout << "Test of printField(float, char\n");
       break;
     }
 
@@ -140,13 +140,13 @@ void loop() {
     file.close();
     t = millis() - t;
     double s = file.fileSize();
-    cout << F("Time ") << 0.001*t << F(" sec\n");
-    cout << F("File size ") << 0.001*s << F(" KB\n");
-    cout << F("Write ") << s/t << F(" KB/sec\n");
-    cout << F("Maximum latency: ") << maxLatency;
-    cout << F(" usec, Minimum Latency: ") << minLatency;
-    cout << F(" usec, Avg Latency: ");
-    cout << totalLatency/N_PRINT << F(" usec\n\n");
+    cout << "Time " << 0.001*t << " sec\n";
+    cout << "File size " << 0.001*s << " KB\n";
+    cout << "Write " << s/t << " KB/sec\n";
+    cout << "Maximum latency: " << maxLatency;
+    cout << " usec, Minimum Latency: " << minLatency;
+    cout << " usec, Avg Latency: ";
+    cout << totalLatency/N_PRINT << " usec\n\n";
   }
-  cout << F("Done!\n\n");
+  cout << "Done!\n\n";
 }

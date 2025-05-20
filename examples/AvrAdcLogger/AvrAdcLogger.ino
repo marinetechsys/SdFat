@@ -278,7 +278,7 @@ ISR(TIMER1_COMPB_vect) {
 }
 //==============================================================================
 // Error messages stored in flash.
-#define error(msg) (Serial.println(F(msg)),errorHalt())
+#define error(msg) (Serial.println(msg),errorHalt())
 #define assert(e) ((e) ? (void)0 : error("assert: " #e))
 //------------------------------------------------------------------------------
 //
@@ -304,7 +304,7 @@ void errorHalt() {
 }
 //------------------------------------------------------------------------------
 void printUnusedStack() {
-  Serial.print(F("\nUnused stack: "));
+  Serial.print("\nUnused stack: ");
   Serial.println(UnusedStack());
 }
 //------------------------------------------------------------------------------
@@ -444,19 +444,19 @@ void adcInit(metadata_t* meta) {
   meta->sampleInterval = ticks;
   meta->cpuFrequency = F_CPU;
   float sampleRate = (float)meta->cpuFrequency/meta->sampleInterval;
-  Serial.print(F("Sample pins:"));
+  Serial.print("Sample pins:");
   for (uint8_t i = 0; i < meta->pinCount; i++) {
     Serial.print(' ');
     Serial.print(meta->pinNumber[i], DEC);
   }
   Serial.println();
-  Serial.print(F("ADC bits: "));
+  Serial.print("ADC bits: ");
   Serial.println(meta->recordEightBits ? 8 : 10);
-  Serial.print(F("ADC clock kHz: "));
+  Serial.print("ADC clock kHz: ");
   Serial.println(meta->adcFrequency/1000);
-  Serial.print(F("Sample Rate: "));
+  Serial.print("Sample Rate: ");
   Serial.println(sampleRate);
-  Serial.print(F("Sample interval usec: "));
+  Serial.print("Sample interval usec: ");
   Serial.println(1000000.0/sampleRate);
 }
 //------------------------------------------------------------------------------
@@ -519,15 +519,15 @@ void binaryToCsv() {
       if (PIN_COUNT != pm->pinCount) {
         error("Invalid pinCount");
       }
-      bp.print(F("Interval,"));
+      bp.print("Interval,");
       float intervalMicros = 1.0e6*pm->sampleInterval/(float)pm->cpuFrequency;
       bp.print(intervalMicros, 4);
-      bp.println(F(",usec"));
+      bp.println(",usec");
       for (uint8_t i = 0; i < PIN_COUNT; i++) {
         if (i) {
           bp.print(',');
         }
-        bp.print(F("pin"));
+        bp.print("pin");
         bp.print(pm->pinNumber[i]);
       }
       bp.println();
@@ -537,7 +537,7 @@ void binaryToCsv() {
     }
     for (size_t i = 0; i < nd; i++, pd++) {
       if (pd->overrun) {
-        bp.print(F("OVERRUN,"));
+        bp.print("OVERRUN,");
         bp.println(pd->overrun);
       }
       for (size_t j = 0; j < pd->count; j += PIN_COUNT) {
@@ -561,9 +561,9 @@ void binaryToCsv() {
   if (!bp.sync() || !csvFile.close()) {
     error("close csvFile failed");
   }
-  Serial.print(F("Done: "));
+  Serial.print("Done: ");
   Serial.print(0.001*(millis() - t0));
-  Serial.println(F(" Seconds"));
+  Serial.println(" Seconds");
 }
 //------------------------------------------------------------------------------
 void clearSerialInput() {
@@ -594,14 +594,14 @@ void createBinFile() {
       p[0] = '0';
     }
   }
-  Serial.print(F("Opening: "));
+  Serial.print("Opening: ");
   Serial.println(binName);
   if (!binFile.open(binName, O_RDWR | O_CREAT)) {
     error("open binName failed");
   }
-  Serial.print(F("Allocating: "));
+  Serial.print("Allocating: ");
   Serial.print(MAX_FILE_SIZE_MiB);
-  Serial.println(F(" MiB"));
+  Serial.println(" MiB");
   if (!binFile.preAllocate(MAX_FILE_SIZE)) {
     error("preAllocate failed");
   }
@@ -611,7 +611,7 @@ bool createCsvFile() {
   char csvName[NAME_DIM];
 
   if (!binFile.isOpen()) {
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return false;
   }
   binFile.getName(csvName, sizeof(csvName));
@@ -623,9 +623,9 @@ bool createCsvFile() {
   if (!csvFile.open(csvName, O_WRONLY|O_CREAT|O_TRUNC)) {
     error("open csvFile failed");
   }
-  Serial.print(F("Writing: "));
+  Serial.print("Writing: ");
   Serial.print(csvName);
-  Serial.println(F(" - type any character to stop"));
+  Serial.println(" - type any character to stop");
   return true;
 }
 //------------------------------------------------------------------------------
@@ -651,7 +651,7 @@ void logData() {
   // Initialize all blocks to save ISR overhead.
   memset(fifoBuffer, 0, sizeof(fifoBuffer));
 
-  Serial.println(F("Logging - type any character to stop"));
+  Serial.println("Logging - type any character to stop");
   // Wait for Serial Idle.
   Serial.flush();
   delay(10);
@@ -718,60 +718,60 @@ void logData() {
   Serial.println();
   // Truncate file if recording stopped early.
   if (binFile.curPosition() < MAX_FILE_SIZE) {
-    Serial.println(F("Truncating file"));
+    Serial.println("Truncating file");
     Serial.flush();
     if (!binFile.truncate()) {
       error("Can't truncate file");
     }
   }
-  Serial.print(F("Max write latency usec: "));
+  Serial.print("Max write latency usec: ");
   Serial.println(maxLatencyUsec);
-  Serial.print(F("Record time sec: "));
+  Serial.print("Record time sec: ");
   Serial.println(0.001*(t1 - t0), 3);
-  Serial.print(F("Sample count: "));
+  Serial.print("Sample count: ");
   Serial.println(count/PIN_COUNT);
-  Serial.print(F("Overruns: "));
+  Serial.print("Overruns: ");
   Serial.println(overruns);
-  Serial.print(F("FIFO_DIM: "));
+  Serial.print("FIFO_DIM: ");
   Serial.println(FIFO_DIM);
-  Serial.print(F("maxFifoUse: "));
+  Serial.print("maxFifoUse: ");
   Serial.println(maxFifoUse + 1);  // include ISR use.
-  Serial.println(F("Done"));
+  Serial.println("Done");
 }
 //------------------------------------------------------------------------------
 void openBinFile() {
   char name[NAME_DIM];
   clearSerialInput();
-  Serial.println(F("Enter file name"));
+  Serial.println("Enter file name");
   if (!serialReadLine(name, sizeof(name))) {
     return;
   }
   if (!sd.exists(name)) {
     Serial.println(name);
-    Serial.println(F("File does not exist"));
+    Serial.println("File does not exist");
     return;
   }
   binFile.close();
   if (!binFile.open(name, O_RDWR)) {
     Serial.println(name);
-    Serial.println(F("open failed"));
+    Serial.println("open failed");
     return;
   }
-  Serial.println(F("File opened"));
+  Serial.println("File opened");
 }
 //------------------------------------------------------------------------------
 // Print data file to Serial
 void printData() {
   block_t buf;
   if (!binFile.isOpen()) {
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return;
   }
   binFile.rewind();
   if (binFile.read(&buf , sizeof(buf)) != sizeof(buf)) {
     error("Read metadata failed");
   }
-  Serial.println(F("Type any character to stop"));
+  Serial.println("Type any character to stop");
   delay(1000);
   while (!Serial.available() &&
          binFile.read(&buf , sizeof(buf)) == sizeof(buf)) {
@@ -779,7 +779,7 @@ void printData() {
       break;
     }
     if (buf.overrun) {
-      Serial.print(F("OVERRUN,"));
+      Serial.print("OVERRUN,");
       Serial.println(buf.overrun);
     }
     for (size_t i = 0; i < buf.count; i++) {
@@ -791,7 +791,7 @@ void printData() {
       }
     }
   }
-  Serial.println(F("Done"));
+  Serial.println("Done");
 }
 //------------------------------------------------------------------------------
 bool serialReadLine(char* str, size_t size) {
@@ -803,7 +803,7 @@ bool serialReadLine(char* str, size_t size) {
     if (c < ' ') break;
     str[n++] = c;
     if (n >= size) {
-      Serial.println(F("input too long"));
+      Serial.println("input too long");
       return false;
     }
     uint32_t m = millis();
@@ -820,7 +820,7 @@ void setup(void) {
   }
   Serial.begin(9600);
   while(!Serial) {}
-  Serial.println(F("Type any character to begin."));
+  Serial.println("Type any character to begin.");
   while(!Serial.available()) {}
 
   FillStack();
@@ -829,9 +829,9 @@ void setup(void) {
   analogRead(PIN_LIST[0]);
 
 #if !ENABLE_DEDICATED_SPI
-  Serial.println(F(
+  Serial.println(
     "\nFor best performance edit SdFatConfig.h\n"
-    "and set ENABLE_DEDICATED_SPI nonzero"));
+    "and set ENABLE_DEDICATED_SPI nonzero");
 #endif  // !ENABLE_DEDICATED_SPI
   // Initialize SD.
   if (!sd.begin(SD_CONFIG)) {
@@ -846,7 +846,7 @@ void setup(void) {
     // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     error("RTC is NOT running!");
   } else {
-    Serial.println(F("RTC is running"));
+    Serial.println("RTC is running");
   }
   // Set callback
   FsDateTime::setCallback(dateTime);
@@ -858,12 +858,12 @@ void loop(void) {
   // Read any Serial data.
   clearSerialInput();
   Serial.println();
-  Serial.println(F("type:"));
-  Serial.println(F("b - open existing bin file"));
-  Serial.println(F("c - convert file to csv"));
-  Serial.println(F("l - list files"));
-  Serial.println(F("p - print data to Serial"));
-  Serial.println(F("r - record ADC data"));
+  Serial.println("type:");
+  Serial.println("b - open existing bin file");
+  Serial.println("c - convert file to csv");
+  Serial.println("l - list files");
+  Serial.println("p - print data to Serial");
+  Serial.println("r - record ADC data");
 
   while(!Serial.available()) {
     yield();
@@ -883,7 +883,7 @@ void loop(void) {
       binaryToCsv();
     }
   } else if (c == 'l') {
-    Serial.println(F("ls:"));
+    Serial.println("ls:");
     sd.ls(&Serial, LS_DATE | LS_SIZE);
   } else if (c == 'p') {
     printData();
@@ -891,7 +891,7 @@ void loop(void) {
     createBinFile();
     logData();
   } else {
-    Serial.println(F("Invalid entry"));
+    Serial.println("Invalid entry");
   }
 }
 #else  // __AVR__

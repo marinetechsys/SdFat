@@ -47,11 +47,6 @@ typedef Stream stream_t;
 #error "Unknown system"
 #endif  // defined(ARDUINO)
 //------------------------------------------------------------------------------
-#ifndef F
-/** Define macro for strings stored in flash. */
-#define F(str) (str)
-#endif  // F
-//------------------------------------------------------------------------------
 #else  // ENABLE_ARDUINO_FEATURES
 #include "PrintBasic.h"
 /** If not Arduino */

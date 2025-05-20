@@ -52,7 +52,7 @@ char line[40];
 
 //------------------------------------------------------------------------------
 // Store error strings in flash to save RAM.
-#define error(s) sd.errorHalt(&Serial, F(s))
+#define error(s) sd.errorHalt(&Serial, s)
 //------------------------------------------------------------------------------
 // Check for extra characters in field or find minus sign.
 char* skipSpace(char* str) {
@@ -127,10 +127,10 @@ void setup() {
     error("open failed");
   }
   // Write test data.
-  file.print(F(
+  file.print(
     "abc,123,456,7.89\r\n"
     "def,-321,654,-9.87\r\n"
-    "ghi,333,0xff,5.55"));
+    "ghi,333,0xff,5.55");
 
   // Rewind file for read.
   file.rewind();
@@ -149,7 +149,7 @@ void setup() {
     Serial.println();
   }
   file.close();
-  Serial.println(F("Done"));
+  Serial.println("Done");
 }
 
 void loop() {

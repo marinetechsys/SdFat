@@ -87,7 +87,7 @@ void dateTime(uint16_t* date, uint16_t* time, uint8_t* ms10) {
   *ms10 = now.second() & 1 ? 100 : 0;
 }
 //------------------------------------------------------------------------------
-#define error(msg) (Serial.println(F("error " msg)), false)
+#define error(msg) (Serial.println("error " msg), false)
 //------------------------------------------------------------------------------
 void clearSerialInput() {
   uint32_t m = micros();
@@ -148,9 +148,9 @@ bool setRtc() {
   char* ptr;
 
   clearSerialInput();
-  Serial.println(F("Enter: YYYY-MM-DD hh:mm:ss"));
+  Serial.println("Enter: YYYY-MM-DD hh:mm:ss");
   getLine(line, sizeof(line));
-  Serial.print(F("Input: "));
+  Serial.print("Input: ");
   Serial.println(line);
 
   y = strtol(line, &ptr, 10);
@@ -167,7 +167,7 @@ bool setRtc() {
   if (ss > 59) return error("second");
 
   rtc.adjust(DateTime(y, m, d, hh, mm, ss));
-  Serial.print(F("RTC set to "));
+  Serial.print("RTC set to ");
   printNow(&Serial);
   Serial.println();
   return true;
@@ -179,14 +179,14 @@ void setup() {
     yield();
   }
 #if RTC_TYPE == 0
-  rtc.begin(DateTime(F(__DATE__), F(__TIME__)));
+  rtc.begin(DateTime(__DATE__, __TIME__));
 #else  // RTC_TYPE
   if (!rtc.begin()) {
-    Serial.println(F("rtc.begin failed"));
+    Serial.println("rtc.begin failed");
     return;
   }
   if (!rtc.isrunning()) {
-    Serial.println(F("RTC is NOT running!"));
+    Serial.println("RTC is NOT running!");
     return;
     // following line sets the RTC to the date & time this sketch was compiled
     // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
@@ -196,11 +196,11 @@ void setup() {
   }
 #endif  // RTC_TYPE
   while (true) {
-    Serial.print(F("DateTime::now "));
+    Serial.print("DateTime::now ");
     printNow(&Serial);
     Serial.println();
     clearSerialInput();
-    Serial.println(F("Type Y to set RTC, any other character to continue"));
+    Serial.println("Type Y to set RTC, any other character to continue");
     while (!Serial.available()) {}
     if (Serial.read() != 'Y') break;
     if (setRtc()) break;
@@ -218,18 +218,18 @@ void setup() {
     sd.remove("RtcTest.txt");
   }
   if (!file.open("RtcTest.txt", FILE_WRITE)) {
-    Serial.println(F("file.open failed"));
+    Serial.println("file.open failed");
     return;
   }
   // Print current date time to file.
-  file.print(F("Test file at: "));
+  file.print("Test file at: ");
   printNow(&file);
   file.println();
 
   file.close();
   // List files in SD root.
   sd.ls(LS_DATE | LS_SIZE);
-  Serial.println(F("Done"));
+  Serial.println("Done");
 }
 //------------------------------------------------------------------------------
 void loop() {

@@ -41,7 +41,7 @@ const uint32_t ROOT_CLUSTER = 4;
 #if !PRINT_FORMAT_PROGRESS
 #define writeMsg(pr, str)
 #elif defined(__AVR__)
-#define writeMsg(pr, str) if (pr) pr->print(F(str))
+#define writeMsg(pr, str) if (pr) pr->print(str)
 #else  // PRINT_FORMAT_PROGRESS
 #define writeMsg(pr, str) if (pr) pr->write(str)
 #endif  // PRINT_FORMAT_PROGRESS

@@ -13,7 +13,7 @@ SdFat sd;
 ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 // store error strings in flash memory
-#define error(s) sd.errorHalt(F(s))
+#define error(s) sd.errorHalt(s)
 //------------------------------------------------------------------------------
 void demoFgets() {
   char line[25];
@@ -29,7 +29,7 @@ void demoFgets() {
   }
 
   // list file
-  cout << F("-----Before Rewrite\r\n");
+  cout << "-----Before Rewrite\r\n";
   while ((c = rdfile.read()) >= 0) {
     Serial.write(c);
   }
@@ -55,7 +55,7 @@ void demoFgets() {
   rdfile.rewind();
 
   // list file
-  cout << F("\r\n-----After Rewrite\r\n");
+  cout << "\r\n-----After Rewrite\r\n";
   while ((c = rdfile.read()) >= 0) {
     Serial.write(c);
   }
@@ -74,13 +74,13 @@ void makeTestFile() {
   }
 
   // write test file
-  wrfile.print(F(
+  wrfile.print(
                  "Line A\r\n"
                  "Line B\r\n"
                  "Line C\r\n"
                  "Line D\r\n"
                  "Line E\r\n"
-               ));
+               );
   wrfile.close();
 }
 //------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ void setup() {
   while (!Serial) {
     yield();
   }
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }
@@ -106,6 +106,6 @@ void setup() {
 
   demoFgets();
 
-  cout << F("\nDone\n");
+  cout << "\nDone\n";
 }
 void loop() {}

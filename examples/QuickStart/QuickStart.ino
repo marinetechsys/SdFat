@@ -44,8 +44,8 @@ ArduinoInStream cin(Serial, cinBuf, sizeof(cinBuf));
 int chipSelect;
 
 void cardOrSpeed() {
-  cout << F("Try another SD card or reduce the SPI bus speed.\n");
-  cout << F("Edit SPI_SPEED in this program to change it.\n");
+  cout << "Try another SD card or reduce the SPI bus speed.\n";
+  cout << "Edit SPI_SPEED in this program to change it.\n";
 }
 
 void clearSerialInput() {
@@ -58,9 +58,9 @@ void clearSerialInput() {
 }
 
 void reformatMsg() {
-  cout << F("Try reformatting the card.  For best results use\n");
-  cout << F("the SdFormatter program in SdFat/examples or download\n");
-  cout << F("and use SDFormatter from www.sdcard.org/downloads.\n");
+  cout << "Try reformatting the card.  For best results use\n";
+  cout << "the SdFormatter program in SdFat/examples or download\n";
+  cout << "and use SDFormatter from www.sdcard.org/downloads.\n";
 }
 
 void setup() {
@@ -70,28 +70,28 @@ void setup() {
   while (!Serial) {
     yield();
   }
-  cout << F("\nSPI pins:\n");
-  cout << F("MISO: ") << int(MISO) << endl;
-  cout << F("MOSI: ") << int(MOSI) << endl;
-  cout << F("SCK:  ") << int(SCK) << endl;
-  cout << F("SS:   ") << int(SS) << endl;
+  cout << "\nSPI pins:\n";
+  cout << "MISO: " << int(MISO) << endl;
+  cout << "MOSI: " << int(MOSI) << endl;
+  cout << "SCK:  " << int(SCK) << endl;
+  cout << "SS:   " << int(SS) << endl;
 #ifdef SDCARD_SS_PIN
-  cout << F("SDCARD_SS_PIN:   ") << int(SDCARD_SS_PIN) << endl;
+  cout << "SDCARD_SS_PIN:   " << int(SDCARD_SS_PIN) << endl;
 #endif  // SDCARD_SS_PIN
 
   if (DISABLE_CHIP_SELECT < 0) {
-    cout << F(
+    cout <<
            "\nBe sure to edit DISABLE_CHIP_SELECT if you have\n"
            "a second SPI device.  For example, with the Ethernet\n"
            "shield, DISABLE_CHIP_SELECT should be set to 10\n"
-           "to disable the Ethernet controller.\n");
+           "to disable the Ethernet controller.\n";
   }
-  cout << F(
+  cout <<
          "\nSD chip select is the key hardware option.\n"
          "Common values are:\n"
          "Arduino Ethernet shield, pin 4\n"
          "Sparkfun SD shield, pin 8\n"
-         "Adafruit SD shields and modules, pin 10\n");
+         "Adafruit SD shields and modules, pin 10\n";
 }
 
 bool firstTry = true;
@@ -100,11 +100,11 @@ void loop() {
   clearSerialInput();
 
   if (!firstTry) {
-    cout << F("\nRestarting\n");
+    cout << "\nRestarting\n";
   }
   firstTry = false;
 
-  cout << F("\nEnter the chip select pin number: ");
+  cout << "\nEnter the chip select pin number: ";
   while (!Serial.available()) {
     yield();
   }
@@ -112,75 +112,75 @@ void loop() {
   if (cin >> chipSelect) {
     cout << chipSelect << endl;
   } else {
-    cout << F("\nInvalid pin number\n");
+    cout << "\nInvalid pin number\n";
     return;
   }
   if (DISABLE_CHIP_SELECT < 0) {
-    cout << F(
+    cout <<
            "\nAssuming the SD is the only SPI device.\n"
-           "Edit DISABLE_CHIP_SELECT to disable another device.\n");
+           "Edit DISABLE_CHIP_SELECT to disable another device.\n";
   } else {
-    cout << F("\nDisabling SPI device on pin ");
+    cout << "\nDisabling SPI device on pin ";
     cout << int(DISABLE_CHIP_SELECT) << endl;
     pinMode(DISABLE_CHIP_SELECT, OUTPUT);
     digitalWrite(DISABLE_CHIP_SELECT, HIGH);
   }
   if (!sd.begin(chipSelect, SPI_SPEED)) {
     if (sd.card()->errorCode()) {
-      cout << F(
+      cout <<
              "\nSD initialization failed.\n"
              "Do not reformat the card!\n"
              "Is the card correctly inserted?\n"
              "Is chipSelect set to the correct value?\n"
              "Does another SPI device need to be disabled?\n"
-             "Is there a wiring/soldering problem?\n");
-      cout << F("\nerrorCode: ") << hex << showbase;
+             "Is there a wiring/soldering problem?\n";
+      cout << "\nerrorCode: " << hex << showbase;
       cout << int(sd.card()->errorCode());
-      cout << F(", errorData: ") << int(sd.card()->errorData());
+      cout << ", errorData: " << int(sd.card()->errorData());
       cout << dec << noshowbase << endl;
       return;
     }
-    cout << F("\nCard successfully initialized.\n");
+    cout << "\nCard successfully initialized.\n";
     if (sd.vol()->fatType() == 0) {
-      cout << F("Can't find a valid FAT16/FAT32 partition.\n");
+      cout << "Can't find a valid FAT16/FAT32 partition.\n";
       reformatMsg();
       return;
     }
-    cout << F("Can't determine error type\n");
+    cout << "Can't determine error type\n";
     return;
   }
-  cout << F("\nCard successfully initialized.\n");
+  cout << "\nCard successfully initialized.\n";
   cout << endl;
 
   uint32_t size = sd.card()->sectorCount();
   if (size == 0) {
-    cout << F("Can't determine the card size.\n");
+    cout << "Can't determine the card size.\n";
     cardOrSpeed();
     return;
   }
   uint32_t sizeMB = 0.000512 * size + 0.5;
-  cout << F("Card size: ") << sizeMB;
-  cout << F(" MB (MB = 1,000,000 bytes)\n");
+  cout << "Card size: " << sizeMB;
+  cout << " MB (MB = 1,000,000 bytes\n");
   cout << endl;
-  cout << F("Volume is FAT") << int(sd.vol()->fatType());
-  cout << F(", Cluster size (bytes): ") << sd.vol()->bytesPerCluster();
+  cout << "Volume is FAT" << int(sd.vol()->fatType());
+  cout << ", Cluster size (bytes: ") << sd.vol()->bytesPerCluster();
   cout << endl << endl;
 
-  cout << F("Files found (date time size name):\n");
+  cout << "Files found (date time size name:\n");
   sd.ls(LS_R | LS_DATE | LS_SIZE);
 
   if ((sizeMB > 1100 && sd.vol()->sectorsPerCluster() < 64)
       || (sizeMB < 2200 && sd.vol()->fatType() == 32)) {
-    cout << F("\nThis card should be reformatted for best performance.\n");
-    cout << F("Use a cluster size of 32 KB for cards larger than 1 GB.\n");
-    cout << F("Only cards larger than 2 GB should be formatted FAT32.\n");
+    cout << "\nThis card should be reformatted for best performance.\n";
+    cout << "Use a cluster size of 32 KB for cards larger than 1 GB.\n";
+    cout << "Only cards larger than 2 GB should be formatted FAT32.\n";
     reformatMsg();
     return;
   }
   // Read any extra Serial data.
   clearSerialInput();
 
-  cout << F("\nSuccess!  Type any character to restart.\n");
+  cout << "\nSuccess!  Type any character to restart.\n";
   while (!Serial.available()) {
     yield();
   }

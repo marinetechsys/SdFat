@@ -262,7 +262,7 @@
 #define SDHC_PREV_CLKFS(x, y) ((x) >>= (y))
 
 #define CCM_CSCDR1_USDHC1_CLK_PODF_MASK (0x7<<11)
-#define CCM_CSCDR1_USDHC1_CLK_PODF(n) (((n)&0x7)<<11)
+#define CCM_CSCDR1_USDHC1_CLK_PODn (((n)&0x7)<<11)
 
 #define IOMUXC_SW_PAD_CTL_PAD_SRE     ((0x1<)<0)
 #define IOMUXC_SW_PAD_CTL_PAD_PKE     ((0x1)<<12)

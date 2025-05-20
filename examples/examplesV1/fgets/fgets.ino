@@ -11,7 +11,7 @@ SdFat sd;
 ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 // store error strings in flash memory
-#define error(s) sd.errorHalt(F(s))
+#define error(s) sd.errorHalt(s)
 //------------------------------------------------------------------------------
 void demoFgets() {
   char line[25];
@@ -24,10 +24,10 @@ void demoFgets() {
     error("demoFgets");
   }
 
-  cout << endl << F(
+  cout << endl <<
          "Lines with '>' end with a '\\n' character\n"
          "Lines with '#' do not end with a '\\n' character\n"
-         "\n");
+         "\n";
 
   // read lines from the file
   while ((n = rdfile.fgets(line, sizeof(line))) > 0) {
@@ -49,13 +49,13 @@ void makeTestFile() {
   }
 
   // write test file
-  wrfile.print(F(
+  wrfile.print(
                  "Line with CRLF\r\n"
                  "Line with only LF\n"
                  "Long line that will require an extra read\n"
                  "\n"  // empty line
                  "Line at EOF without NL"
-               ));
+               );
   wrfile.close();
 }
 //------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ void setup(void) {
     yield();
   }
 
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }
@@ -83,6 +83,6 @@ void setup(void) {
 
   demoFgets();
 
-  cout << F("\nDone\n");
+  cout << "\nDone\n";
 }
 void loop(void) {}

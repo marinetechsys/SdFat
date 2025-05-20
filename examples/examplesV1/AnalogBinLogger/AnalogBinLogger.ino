@@ -256,7 +256,7 @@ ISR(TIMER1_COMPB_vect) {
 }
 //==============================================================================
 // Error messages stored in flash.
-#define error(msg) {sd.errorPrint(F(msg));fatalBlink();}
+#define error(msg) {sd.errorPrint(msg);fatalBlink();}
 //------------------------------------------------------------------------------
 //
 void fatalBlink() {
@@ -378,19 +378,19 @@ void adcInit(metadata_t* meta) {
   meta->sampleInterval = ticks;
   meta->cpuFrequency = F_CPU;
   float sampleRate = (float)meta->cpuFrequency/meta->sampleInterval;
-  Serial.print(F("Sample pins:"));
+  Serial.print("Sample pins:");
   for (uint8_t i = 0; i < meta->pinCount; i++) {
     Serial.print(' ');
     Serial.print(meta->pinNumber[i], DEC);
   }
   Serial.println();
-  Serial.print(F("ADC bits: "));
+  Serial.print("ADC bits: ");
   Serial.println(meta->recordEightBits ? 8 : 10);
-  Serial.print(F("ADC clock kHz: "));
+  Serial.print("ADC clock kHz: ");
   Serial.println(meta->adcFrequency/1000);
-  Serial.print(F("Sample Rate: "));
+  Serial.print("Sample Rate: ");
   Serial.println(sampleRate);
-  Serial.print(F("Sample interval usec: "));
+  Serial.print("Sample interval usec: ");
   Serial.println(1000000.0/sampleRate, 4);
 }
 //------------------------------------------------------------------------------
@@ -432,7 +432,7 @@ void binaryToCsv() {
   StdioStream csvStream;
 
   if (!binFile.isOpen()) {
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return;
   }
   binFile.rewind();
@@ -447,19 +447,19 @@ void binaryToCsv() {
     error("open csvStream failed");
   }
   Serial.println();
-  Serial.print(F("Writing: "));
+  Serial.print("Writing: ");
   Serial.print(csvName);
-  Serial.println(F(" - type any character to stop"));
+  Serial.println(" - type any character to stop");
   pm = (metadata_t*)&buf;
-  csvStream.print(F("Interval,"));
+  csvStream.print("Interval,");
   float intervalMicros = 1.0e6*pm->sampleInterval/(float)pm->cpuFrequency;
   csvStream.print(intervalMicros, 4);
-  csvStream.println(F(",usec"));
+  csvStream.println(",usec");
   for (uint8_t i = 0; i < pm->pinCount; i++) {
     if (i) {
       csvStream.putc(',');
     }
-    csvStream.print(F("pin"));
+    csvStream.print("pin");
     csvStream.print(pm->pinNumber[i]);
   }
   csvStream.println();
@@ -469,7 +469,7 @@ void binaryToCsv() {
       break;
     }
     if (buf.overrun) {
-      csvStream.print(F("OVERRUN,"));
+      csvStream.print("OVERRUN,");
       csvStream.println(buf.overrun);
     }
     for (uint16_t j = 0; j < buf.count; j += PIN_COUNT) {
@@ -495,9 +495,9 @@ void binaryToCsv() {
     }
   }
   csvStream.fclose();
-  Serial.print(F("Done: "));
+  Serial.print("Done: ");
   Serial.print(0.001*(millis() - t0));
-  Serial.println(F(" Seconds"));
+  Serial.println(" Seconds");
 }
 //------------------------------------------------------------------------------
 // read data file and check for overruns
@@ -508,7 +508,7 @@ void checkOverrun() {
   uint32_t bn = 0;
 
   if (!binFile.isOpen()) {
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return;
   }
   if (!binFile.contiguousRange(&bgnBlock, &endBlock)) {
@@ -516,7 +516,7 @@ void checkOverrun() {
   }
   binFile.rewind();
   Serial.println();
-  Serial.println(F("Checking overrun errors - type any character to stop"));
+  Serial.println("Checking overrun errors - type any character to stop");
   if (binFile.read(&buf , 512) != 512) {
     error("Read metadata failed");
   }
@@ -528,8 +528,8 @@ void checkOverrun() {
     if (buf.overrun) {
       if (!headerPrinted) {
         Serial.println();
-        Serial.println(F("Overruns:"));
-        Serial.println(F("fileBlockNumber,sdBlockNumber,overrunCount"));
+        Serial.println("Overruns:");
+        Serial.println("fileBlockNumber,sdBlockNumber,overrunCount");
         headerPrinted = true;
       }
       Serial.print(bn);
@@ -541,9 +541,9 @@ void checkOverrun() {
     bn++;
   }
   if (!headerPrinted) {
-    Serial.println(F("No errors found"));
+    Serial.println("No errors found");
   } else {
-    Serial.println(F("Done"));
+    Serial.println("Done");
   }
 }
 //------------------------------------------------------------------------------
@@ -551,7 +551,7 @@ void checkOverrun() {
 void dumpData() {
   block_t buf;
   if (!binFile.isOpen()) {
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return;
   }
   binFile.rewind();
@@ -559,14 +559,14 @@ void dumpData() {
     error("Read metadata failed");
   }
   Serial.println();
-  Serial.println(F("Type any character to stop"));
+  Serial.println("Type any character to stop");
   delay(1000);
   while (!Serial.available() && binFile.read(&buf , 512) == 512) {
     if (buf.count == 0) {
       break;
     }
     if (buf.overrun) {
-      Serial.print(F("OVERRUN,"));
+      Serial.print("OVERRUN,");
       Serial.println(buf.overrun);
     }
     for (uint16_t i = 0; i < buf.count; i++) {
@@ -578,7 +578,7 @@ void dumpData() {
       }
     }
   }
-  Serial.println(F("Done"));
+  Serial.println("Done");
 }
 //------------------------------------------------------------------------------
 // log data
@@ -612,13 +612,13 @@ void logData() {
   }
   // Delete old tmp file.
   if (sd.exists(TMP_FILE_NAME)) {
-    Serial.println(F("Deleting tmp file"));
+    Serial.println("Deleting tmp file");
     if (!sd.remove(TMP_FILE_NAME)) {
       error("Can't remove tmp file");
     }
   }
   // Create new file.
-  Serial.println(F("Creating new file"));
+  Serial.println("Creating new file");
   binFile.close();
   if (!binFile.createContiguous(TMP_FILE_NAME, 512 * FILE_BLOCK_COUNT)) {
     error("createContiguous failed");
@@ -634,7 +634,7 @@ void logData() {
   }
 
   // Flash erase all data in the file.
-  Serial.println(F("Erasing all data"));
+  Serial.println("Erasing all data");
   uint32_t bgnErase = bgnBlock;
   uint32_t endErase;
   while (bgnErase < endBlock) {
@@ -670,7 +670,7 @@ void logData() {
   }
   // Give SD time to prepare for big write.
   delay(1000);
-  Serial.println(F("Logging - type any character to stop"));
+  Serial.println("Logging - type any character to stop");
   // Wait for Serial Idle.
   Serial.flush();
   delay(10);
@@ -742,7 +742,7 @@ void logData() {
   }
   // Truncate file if recording stopped early.
   if (bn != FILE_BLOCK_COUNT) {
-    Serial.println(F("Truncating file"));
+    Serial.println("Truncating file");
     if (!binFile.truncate(512L * bn)) {
       error("Can't truncate file");
     }
@@ -750,19 +750,19 @@ void logData() {
   if (!binFile.rename(binName)) {
     error("Can't rename file");
   }
-  Serial.print(F("File renamed: "));
+  Serial.print("File renamed: ");
   Serial.println(binName);
-  Serial.print(F("Max block write usec: "));
+  Serial.print("Max block write usec: ");
   Serial.println(maxLatency);
-  Serial.print(F("Record time sec: "));
+  Serial.print("Record time sec: ");
   Serial.println(0.001*(t1 - t0), 3);
-  Serial.print(F("Sample count: "));
+  Serial.print("Sample count: ");
   Serial.println(count/PIN_COUNT);
-  Serial.print(F("Samples/sec: "));
+  Serial.print("Samples/sec: ");
   Serial.println((1000.0/PIN_COUNT)*count/(t1-t0));
-  Serial.print(F("Overruns: "));
+  Serial.print("Overruns: ");
   Serial.println(overruns);
-  Serial.println(F("Done"));
+  Serial.println("Done");
 }
 //------------------------------------------------------------------------------
 void setup(void) {
@@ -774,7 +774,7 @@ void setup(void) {
   // Read the first sample pin to init the ADC.
   analogRead(PIN_LIST[0]);
 
-  Serial.print(F("FreeStack: "));
+  Serial.print("FreeStack: ");
   Serial.println(FreeStack());
 
   // Initialize at the highest speed supported by the board that is
@@ -791,11 +791,11 @@ void loop(void) {
     delay(10);
   } while (Serial.available() && Serial.read() >= 0);
   Serial.println();
-  Serial.println(F("type:"));
-  Serial.println(F("c - convert file to csv"));
-  Serial.println(F("d - dump data to Serial"));
-  Serial.println(F("e - overrun error details"));
-  Serial.println(F("r - record ADC data"));
+  Serial.println("type:");
+  Serial.println("c - convert file to csv");
+  Serial.println("d - dump data to Serial");
+  Serial.println("e - overrun error details");
+  Serial.println("r - record ADC data");
 
   while(!Serial.available()) {
     yield();
@@ -818,7 +818,7 @@ void loop(void) {
   } else if (c == 'r') {
     logData();
   } else {
-    Serial.println(F("Invalid entry"));
+    Serial.println("Invalid entry");
   }
 }
 #else  // __AVR__

@@ -31,11 +31,11 @@ void setup() {
   while (!Serial) {}
 
 #if USE_SD_H
-  Serial.println(F("Using SD.h. Set USE_SD_H zero to use SdFat.h."));
+  Serial.println("Using SD.h. Set USE_SD_H zero to use SdFat.h.");
 #else  // USE_SD_H
-  Serial.println(F("Using SdFat.h. Set USE_SD_H nonzero to use SD.h."));
+  Serial.println("Using SdFat.h. Set USE_SD_H nonzero to use SD.h.");
 #endif  // USE_SD_H
-  Serial.println(F("\nType any character to begin."));
+  Serial.println("\nType any character to begin.");
   while (!Serial.available()) {
     yield();
   }

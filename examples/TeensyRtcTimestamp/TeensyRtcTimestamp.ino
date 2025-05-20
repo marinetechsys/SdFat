@@ -98,7 +98,7 @@ void setup() {
   while (!Serial) {
     yield();
   }
-  Serial.println(F("Type any character to begin"));
+  Serial.println("Type any character to begin");
   while (!Serial.available()) {
     yield();
   }
@@ -106,7 +106,7 @@ void setup() {
     Serial.println("Unable to sync with the RTC");
     return;
   }
-  Serial.print(F("DateTime::now "));
+  Serial.print("DateTime::now ");
   printNow(&Serial);
   Serial.println();
 
@@ -121,18 +121,18 @@ void setup() {
     sd.remove("RtcTest.txt");
   }
   if (!file.open("RtcTest.txt", FILE_WRITE)) {
-    Serial.println(F("file.open failed"));
+    Serial.println("file.open failed");
     return;
   }
   // Print current date time to file.
-  file.print(F("Test file at: "));
+  file.print("Test file at: ");
   printNow(&file);
   file.println();
 
   file.close();
   // List files in SD root.
   sd.ls(LS_DATE | LS_SIZE);
-  Serial.println(F("Done"));
+  Serial.println("Done");
 }
 //------------------------------------------------------------------------------
 void loop() {

@@ -32,9 +32,9 @@ const uint8_t ANALOG_COUNT = 4;
 //------------------------------------------------------------------------------
 // Write data header.
 void writeHeader() {
-  file.print(F("micros"));
+  file.print("micros");
   for (uint8_t i = 0; i < ANALOG_COUNT; i++) {
-    file.print(F(",adc"));
+    file.print(",adc");
     file.print(i, DEC);
   }
   file.println();
@@ -60,7 +60,7 @@ void logData() {
 }
 //==============================================================================
 // Error messages stored in flash.
-#define error(msg) sd.errorHalt(F(msg))
+#define error(msg) sd.errorHalt(msg)
 //------------------------------------------------------------------------------
 void setup() {
   const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
@@ -74,7 +74,7 @@ void setup() {
   }
   delay(1000);
 
-  Serial.println(F("Type any character to start"));
+  Serial.println("Type any character to start");
   while (!Serial.available()) {
     yield();
   }
@@ -107,9 +107,9 @@ void setup() {
     delay(10);
   } while (Serial.available() && Serial.read() >= 0);
 
-  Serial.print(F("Logging to: "));
+  Serial.print("Logging to: ");
   Serial.println(fileName);
-  Serial.println(F("Type any character to stop"));
+  Serial.println("Type any character to stop");
 
   // Write data header.
   writeHeader();
@@ -144,7 +144,7 @@ void loop() {
   if (Serial.available()) {
     // Close file and stop.
     file.close();
-    Serial.println(F("Done"));
+    Serial.println("Done");
     while (true) {}
   }
 }

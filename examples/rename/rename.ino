@@ -57,7 +57,7 @@ FsFile file;
 ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 // store error strings in flash to save RAM
-#define error(s) sd.errorHalt(&Serial, F(s))
+#define error(s) sd.errorHalt(&Serial, s)
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
@@ -66,7 +66,7 @@ void setup() {
   while (!Serial) {
     yield();
   }
-  cout << F("Insert an empty SD.  Type any character to start.") << endl;
+  cout << "Insert an empty SD.  Type any character to start." << endl;
   while (!Serial.available()) {
     yield();
   }
@@ -79,7 +79,7 @@ void setup() {
 
   // Remove file/dirs from previous run.
   if (sd.exists("dir2/DIR3/NAME3.txt")) {
-    cout << F("Removing /dir2/DIR3/NAME3.txt") << endl;
+    cout << "Removing /dir2/DIR3/NAME3.txt" << endl;
     if (!sd.remove("dir2/DIR3/NAME3.txt") ||
         !sd.rmdir("dir2/DIR3/") ||
         !sd.rmdir("dir2/")) {
@@ -99,7 +99,7 @@ void setup() {
   file.println("A test line for name2.txt");
 
   // list files
-  cout << F("------") << endl;
+  cout << "------" << endl;
   sd.ls(LS_R);
 
   // make a new directory - "Dir1"
@@ -114,7 +114,7 @@ void setup() {
   file.println("A line for Dir1/NAME3.txt");
 
   // list files
-  cout << F("------") << endl;
+  cout << "------" << endl;
   sd.ls(LS_R);
 
   // make directory "dir2"
@@ -138,9 +138,9 @@ void setup() {
   file.close();
 
   // list files
-  cout << F("------") << endl;
+  cout << "------" << endl;
   sd.ls(LS_R);
 
-  cout << F("Done") << endl;
+  cout << "Done" << endl;
 }
 void loop() {}

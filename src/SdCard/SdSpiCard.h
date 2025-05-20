@@ -38,7 +38,7 @@
 #if CHECK_SPI_ACTIVE
 /** Check SPI active. */
 #define SPI_ASSERT_ACTIVE {if (!m_spiActive) {\
-  Serial.print(F("SPI_ASSERTACTIVE"));\
+  Serial.print("SPI_ASSERTACTIVE");\
   Serial.println(__LINE__);}}
 #else  // CHECK_SPI_ACTIVE
 /** Do not check SPI active. */

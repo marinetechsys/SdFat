@@ -18,7 +18,7 @@ ArduinoOutStream cout(Serial);
 char fileName[] = "testfile.csv";
 //------------------------------------------------------------------------------
 // store error strings in flash to save RAM
-#define error(s) sd.errorHalt(F(s))
+#define error(s) sd.errorHalt(s)
 //------------------------------------------------------------------------------
 // read and print CSV test file
 void readFile() {
@@ -76,11 +76,11 @@ void writeFile() {
   ofstream sdout(fileName);
 
   // write file from string stored in flash
-  sdout << F(
+  sdout <<
           "Line 1,1,2.3,4.5\n"
           "Line 2,6,7.8,9.0\n"
           "Line 3,9,8.7,6.5\n"
-          "Line 4,-4,-3.2,-1\n") << flush;
+          "Line 4,-4,-3.2,-1\n" << flush;
 
   // check for any errors
   if (!sdout) {
@@ -97,7 +97,7 @@ void setup() {
   while (!Serial) {
     yield();
   }
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }

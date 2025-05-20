@@ -153,7 +153,7 @@ void setup() {
     return;
   }
   // Write test data.
-  file.print(F(
+  file.print(
 #if CSV_DELIM == ','
     "36,23.20,20.70,57.60,79.50,01:08:14,23.06.16\r\n"
     "37,23.21,20.71,57.61,79.51,02:08:14,23.07.16\r\n"
@@ -163,7 +163,7 @@ void setup() {
 #else
 #error "Bad CSV_DELIM"
 #endif
-));
+);
 
   // Rewind the file for read.
   file.seek(0);

@@ -81,8 +81,8 @@ bool FatFile::cmpName(uint16_t index, FatLfn_t* fname, uint8_t lfnOrd) {
       goto fail;
     }
     // These should be checked in caller.
-    DBG_HALT_IF(ldir->attributes != FAT_ATTRIB_LONG_NAME);
-    DBG_HALT_IF(order != (ldir->order & 0X1F));
+    DBG_HALT_Ildir->attributes != FAT_ATTRIB_LONG_NAME;
+    DBG_HALT_Iorder != (ldir->order & 0X1F);
     for (uint8_t i = 0; i < 13; i++) {
       uint16_t u = getLfnChar(ldir, i);
       if (fname->atEnd()) {
@@ -91,7 +91,7 @@ bool FatFile::cmpName(uint16_t index, FatLfn_t* fname, uint8_t lfnOrd) {
 #if USE_UTF8_LONG_NAMES
       uint16_t cp = fname->get16();
       // Make sure caller checked for valid UTF-8.
-      DBG_HALT_IF(cp == 0XFFFF);
+      DBG_HALT_Icp == 0XFFFF;
       if (toUpcase(u) != toUpcase(cp)) {
         return false;
       }
@@ -134,7 +134,7 @@ bool FatFile::createLFN(uint16_t index, FatLfn_t* fname, uint8_t lfnOrd) {
       } else {
         cp = fname->get16();
         // Verify caller checked for valid UTF-8.
-        DBG_HALT_IF(cp == 0XFFFF);
+        DBG_HALT_Icp == 0XFFFF;
       }
       putLfnChar(ldir, i, cp);
     }
@@ -159,9 +159,9 @@ bool FatFile::makeSFN(FatLfn_t* fname) {
   const char* ptr = fname->begin;
 
   // Assume not zero length.
-  DBG_HALT_IF(end == ptr);
+  DBG_HALT_Iend == ptr;
   // Assume blanks removed from start and end.
-  DBG_HALT_IF(*ptr == ' ' || *(end - 1) == ' ' || *(end - 1) == '.');
+  DBG_HALT_I*ptr == ' ' || *(end - 1 == ' ' || *(end - 1) == '.');
 
   // Blank file short name.
   for (uint8_t k = 0; k < 11; k++) {
@@ -234,11 +234,11 @@ bool FatFile::makeUniqueSfn(FatLfn_t* fname) {
   DirFat_t* dir;
   uint16_t hex = 0;
 
-  DBG_HALT_IF(!(fname->flags & FNAME_FLAG_LOST_CHARS));
-  DBG_HALT_IF(fname->sfn[pos] != '~' && fname->sfn[pos + 1] != '1');
+  DBG_HALT_I!(fname->flags & FNAME_FLAG_LOST_CHARS);
+  DBG_HALT_Ifname->sfn[pos] != '~' && fname->sfn[pos + 1] != '1';
 
   for (uint8_t seq = FIRST_HASH_SEQ; seq < 100; seq++) {
-     DBG_WARN_IF(seq > FIRST_HASH_SEQ);
+     DBG_WARN_Iseq > FIRST_HASH_SEQ;
 #ifdef USE_LFN_HASH
     hex = Bernstein(fname->begin, fname->end, seq);
 #else

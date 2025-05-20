@@ -59,9 +59,9 @@ void setup() {
   }
 
   if (!file.open("SoftSPI.txt", O_RDWR | O_CREAT)) {
-    sd.errorHalt(F("open failed"));
+    sd.errorHalt("open failed");
   }
-  file.println(F("This line was printed using software SPI."));
+  file.println("This line was printed using software SPI.");
 
   file.rewind();
 
@@ -71,7 +71,7 @@ void setup() {
 
   file.close();
 
-  Serial.println(F("Done."));
+  Serial.println("Done.");
 }
 //------------------------------------------------------------------------------
 void loop() {}

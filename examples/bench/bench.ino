@@ -84,23 +84,23 @@ FsFile file;
 ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 // Store error strings in flash to save RAM.
-#define error(s) sd.errorHalt(&Serial, F(s))
+#define error(s) sd.errorHalt(&Serial, s)
 //------------------------------------------------------------------------------
 void cidDmp() {
   cid_t cid;
   if (!sd.card()->readCID(&cid)) {
     error("readCID failed");
   }
-  cout << F("\nManufacturer ID: ");
+  cout << "\nManufacturer ID: ";
   cout << uppercase << showbase << hex << int(cid.mid) << dec << endl;
-  cout << F("OEM ID: ") << cid.oid[0] << cid.oid[1] << endl;
-  cout << F("Product: ");
+  cout << "OEM ID: " << cid.oid[0] << cid.oid[1] << endl;
+  cout << "Product: ";
   for (uint8_t i = 0; i < 5; i++) {
     cout << cid.pnm[i];
   }
-  cout << F("\nRevision: ") << cid.prvN() << '.' << cid.prvM() << endl;
-  cout << F("Serial number: ") << hex << cid.psn() << dec << endl;
-  cout << F("Manufacturing date: ");
+  cout << "\nRevision: " << cid.prvN() << '.' << cid.prvM() << endl;
+  cout << "Serial number: " << hex << cid.psn() << dec << endl;
+  cout << "Manufacturing date: ";
   cout << cid.mdtMonth() << '/' << cid.mdtYear() << endl;
   cout << endl;
 }
@@ -122,11 +122,11 @@ void setup() {
     yield();
   }
   delay(1000);
-  cout << F("\nUse a freshly formatted SD for best performance.\n");
+  cout << "\nUse a freshly formatted SD for best performance.\n";
   if (!ENABLE_DEDICATED_SPI) {
-    cout << F(
+    cout <<
       "\nSet ENABLE_DEDICATED_SPI nonzero in\n"
-      "SdFatConfig.h for best SPI performance.\n");
+      "SdFatConfig.h for best SPI performance.\n";
   }
   // use uppercase in hex and use 0X base prefix
   cout << uppercase << showbase << endl;
@@ -144,25 +144,25 @@ void loop() {
   clearSerialInput();
 
   // F() stores strings in flash to save RAM
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }
 #if HAS_UNUSED_STACK
-  cout << F("FreeStack: ") << FreeStack() << endl;
+  cout << "FreeStack: " << FreeStack() << endl;
 #endif  // HAS_UNUSED_STACK
 
   if (!sd.begin(SD_CONFIG)) {
     sd.initErrorHalt(&Serial);
   }
   if (sd.fatType() == FAT_TYPE_EXFAT) {
-    cout << F("Type is exFAT") << endl;
+    cout << "Type is exFAT" << endl;
   } else {
-    cout << F("Type is FAT") << int(sd.fatType()) << endl;
+    cout << "Type is FAT" << int(sd.fatType()) << endl;
   }
 
-  cout << F("Card size: ") << sd.card()->sectorCount()*512E-9;
-  cout << F(" GB (GB = 1E9 bytes)") << endl;
+  cout << "Card size: " << sd.card()->sectorCount()*512E-9;
+  cout << " GB (GB = 1E9 bytes") << endl;
 
   cidDmp();
 
@@ -180,15 +180,15 @@ void loop() {
   }
   buf[BUF_SIZE-1] = '\n';
 
-  cout << F("FILE_SIZE_MB = ") << FILE_SIZE_MB << endl;
-  cout << F("BUF_SIZE = ") << BUF_SIZE << F(" bytes\n");
-  cout << F("Starting write test, please wait.") << endl << endl;
+  cout << "FILE_SIZE_MB = " << FILE_SIZE_MB << endl;
+  cout << "BUF_SIZE = " << BUF_SIZE << " bytes\n";
+  cout << "Starting write test, please wait." << endl << endl;
 
   // do write test
   uint32_t n = FILE_SIZE/BUF_SIZE;
-  cout <<F("write speed and latency") << endl;
-  cout << F("speed,max,min,avg") << endl;
-  cout << F("KB/Sec,usec,usec,usec") << endl;
+  cout <<"write speed and latency" << endl;
+  cout << "speed,max,min,avg" << endl;
+  cout << "KB/Sec,usec,usec,usec" << endl;
   for (uint8_t nTest = 0; nTest < WRITE_COUNT; nTest++) {
     file.truncate(0);
     if (PRE_ALLOCATE) {
@@ -226,10 +226,10 @@ void loop() {
     cout << s/t <<',' << maxLatency << ',' << minLatency;
     cout << ',' << totalLatency/n << endl;
   }
-  cout << endl << F("Starting read test, please wait.") << endl;
-  cout << endl <<F("read speed and latency") << endl;
-  cout << F("speed,max,min,avg") << endl;
-  cout << F("KB/Sec,usec,usec,usec") << endl;
+  cout << endl << "Starting read test, please wait." << endl;
+  cout << endl <<"read speed and latency" << endl;
+  cout << "speed,max,min,avg" << endl;
+  cout << "KB/Sec,usec,usec,usec" << endl;
 
   // do read test
   for (uint8_t nTest = 0; nTest < READ_COUNT; nTest++) {
@@ -268,7 +268,7 @@ void loop() {
     cout << s/t <<',' << maxLatency << ',' << minLatency;
     cout << ',' << totalLatency/n << endl;
   }
-  cout << endl << F("Done") << endl;
+  cout << endl << "Done" << endl;
   file.close();
   sd.end();
 }

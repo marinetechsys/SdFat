@@ -61,7 +61,7 @@ void setup() {
     yield();
   }
   // F() stores strings in flash to save RAM
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }

@@ -28,9 +28,9 @@ void printData(Print* pr, data_t* data) {
 // Print data header.
 void printHeader(Print* pr) {
   startMicros = 0;
-  pr->print(F("micros"));
+  pr->print("micros");
   for (int i = 0; i < ADC_DIM; i++) {
-    pr->print(F(",adc"));
+    pr->print(",adc");
     pr->print(i);
   }
   pr->println();

@@ -27,16 +27,16 @@ void setup() {
   delay(1000);
 
   // Print the location of some test files.
-  Serial.println(F("\r\n"
+  Serial.println("\r\n"
                    "You can use test files located in\r\n"
-                   "SdFat/examples/LongFileName/testFiles"));
+                   "SdFat/examples/LongFileName/testFiles");
 
   // Initialize at the highest speed supported by the board that is
   // not over 50 MHz. Try a lower speed if SPI errors occur.
   if (!sd.begin(SD_CS_PIN, SD_SCK_MHZ(50))) {
     sd.initErrorHalt();
   }
-  Serial.print(F("FreeStack: "));
+  Serial.print("FreeStack: ");
   Serial.println(FreeStack());
   Serial.println();
 
@@ -69,7 +69,7 @@ void loop() {
   do {
     delay(10);
   } while (Serial.available() && Serial.read() >= 0);
-  Serial.print(F("\r\nEnter File Number: "));
+  Serial.print("\r\nEnter File Number: ");
 
   while (!Serial.available()) {
     yield();
@@ -77,12 +77,12 @@ void loop() {
   c = Serial.read();
   uint8_t i = c - '0';
   if (!isdigit(c) || i >= n) {
-    Serial.println(F("Invald number"));
+    Serial.println("Invald number");
     return;
   }
   Serial.println(i);
   if (!file.open(&dirFile, dirIndex[i], O_RDONLY)) {
-    sd.errorHalt(F("open"));
+    sd.errorHalt("open");
   }
   Serial.println();
 

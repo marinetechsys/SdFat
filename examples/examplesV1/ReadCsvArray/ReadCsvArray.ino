@@ -47,7 +47,7 @@ size_t readField(File* file, char* str, size_t size, const char* delim) {
   return n;
 }
 //------------------------------------------------------------------------------
-#define errorHalt(msg) {Serial.println(F(msg)); while (true) {}}
+#define errorHalt(msg) {Serial.println(msg); while (true) {}}
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
@@ -73,13 +73,13 @@ void setup() {
   file.rewind();
 
   // Write test data.
-  file.print(F(
+  file.print(
     "11,12,13,14\r\n"
     "21,22,23,24\r\n"
     "31,32,33,34\r\n"
     "41,42,43,44\r\n"
     "51,52,53,54"     // Allow missing endl at eof.
-    ));
+    );
 
   // Rewind the file for read.
   file.rewind();

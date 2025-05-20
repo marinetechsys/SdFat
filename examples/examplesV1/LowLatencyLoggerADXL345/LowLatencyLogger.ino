@@ -118,7 +118,7 @@ struct block_t {
 };
 //==============================================================================
 // Error messages stored in flash.
-#define error(msg) {sd.errorPrint(&Serial, F(msg));fatalBlink();}
+#define error(msg) {sd.errorPrint(&Serial, msg);fatalBlink();}
 //------------------------------------------------------------------------------
 //
 void fatalBlink() {
@@ -141,14 +141,14 @@ void checkOverrun() {
 
   if (!binFile.isOpen()) {
     Serial.println();
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return;
   }
   binFile.rewind();
   Serial.println();
-  Serial.print(F("FreeStack: "));
+  Serial.print("FreeStack: ");
   Serial.println(FreeStack());
-  Serial.println(F("Checking overrun errors - type any character to stop"));
+  Serial.println("Checking overrun errors - type any character to stop");
   while (binFile.read(&block, 512) == 512) {
     if (block.count == 0) {
       break;
@@ -156,8 +156,8 @@ void checkOverrun() {
     if (block.overrun) {
       if (!headerPrinted) {
         Serial.println();
-        Serial.println(F("Overruns:"));
-        Serial.println(F("fileBlockNumber,sdBlockNumber,overrunCount"));
+        Serial.println("Overruns:");
+        Serial.println("fileBlockNumber,sdBlockNumber,overrunCount");
         headerPrinted = true;
       }
       Serial.print(bn);
@@ -169,9 +169,9 @@ void checkOverrun() {
     bn++;
   }
   if (!headerPrinted) {
-    Serial.println(F("No errors found"));
+    Serial.println("No errors found");
   } else {
-    Serial.println(F("Done"));
+    Serial.println("Done");
   }
 }
 //-----------------------------------------------------------------------------
@@ -186,11 +186,11 @@ void binaryToCsv() {
 
   if (!binFile.isOpen()) {
     Serial.println();
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return;
   }
   Serial.println();
-  Serial.print(F("FreeStack: "));
+  Serial.print("FreeStack: ");
   Serial.println(FreeStack());
 
   // Create a new csvFile.
@@ -201,9 +201,9 @@ void binaryToCsv() {
     error("open csvFile failed");
   }
   binFile.rewind();
-  Serial.print(F("Writing: "));
+  Serial.print("Writing: ");
   Serial.print(csvName);
-  Serial.println(F(" - type any character to stop"));
+  Serial.println(" - type any character to stop");
   printHeader(&csvFile);
   uint32_t tPct = millis();
   while (!Serial.available() && binFile.read(&block, 512) == 512) {
@@ -212,7 +212,7 @@ void binaryToCsv() {
       break;
     }
     if (block.overrun) {
-      csvFile.print(F("OVERRUN,"));
+      csvFile.print("OVERRUN,");
       csvFile.println(block.overrun);
     }
     for (i = 0; i < block.count; i++) {
@@ -236,9 +236,9 @@ void binaryToCsv() {
     }
   }
   csvFile.close();
-  Serial.print(F("Done: "));
+  Serial.print("Done: ");
   Serial.print(0.001*(millis() - t0));
-  Serial.println(F(" Seconds"));
+  Serial.println(" Seconds");
 }
 //-----------------------------------------------------------------------------
 void createBinFile() {
@@ -248,13 +248,13 @@ void createBinFile() {
 
   // Delete old tmp file.
   if (sd.exists(TMP_FILE_NAME)) {
-    Serial.println(F("Deleting tmp file " TMP_FILE_NAME));
+    Serial.println("Deleting tmp file " TMP_FILE_NAME);
     if (!sd.remove(TMP_FILE_NAME)) {
       error("Can't remove tmp file");
     }
   }
   // Create new file.
-  Serial.println(F("\nCreating new file"));
+  Serial.println("\nCreating new file");
   binFile.close();
   if (!binFile.createContiguous(TMP_FILE_NAME, 512 * FILE_BLOCK_COUNT)) {
     error("createContiguous failed");
@@ -264,7 +264,7 @@ void createBinFile() {
     error("contiguousRange failed");
   }
   // Flash erase all data in the file.
-  Serial.println(F("Erasing all data"));
+  Serial.println("Erasing all data");
   uint32_t bgnErase = bgnBlock;
   uint32_t endErase;
   while (bgnErase < endBlock) {
@@ -284,12 +284,12 @@ void dumpData() {
   block_t block;
   if (!binFile.isOpen()) {
     Serial.println();
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return;
   }
   binFile.rewind();
   Serial.println();
-  Serial.println(F("Type any character to stop"));
+  Serial.println("Type any character to stop");
   delay(1000);
   printHeader(&Serial);
   while (!Serial.available() && binFile.read(&block , 512) == 512) {
@@ -297,14 +297,14 @@ void dumpData() {
       break;
     }
     if (block.overrun) {
-      Serial.print(F("OVERRUN,"));
+      Serial.print("OVERRUN,");
       Serial.println(block.overrun);
     }
     for (uint16_t i = 0; i < block.count; i++) {
       printData(&Serial, &block.data[i]);
     }
   }
-  Serial.println(F("Done"));
+  Serial.println("Done");
 }
 //------------------------------------------------------------------------------
 // log data
@@ -317,7 +317,7 @@ void logData() {
 void openBinFile() {
   char name[FILE_NAME_DIM];
   strcpy(name, binName);
-  Serial.println(F("\nEnter two digit version"));
+  Serial.println("\nEnter two digit version");
   Serial.write(name, BASE_NAME_SIZE);
   for (int i = 0; i < 2; i++) {
     while (!Serial.available()) {
@@ -326,23 +326,23 @@ void openBinFile() {
     char c = Serial.read();
     Serial.write(c);
     if (c < '0' || c > '9') {
-      Serial.println(F("\nInvalid digit"));
+      Serial.println("\nInvalid digit");
       return;
     }
     name[BASE_NAME_SIZE + i] = c;
   }
   Serial.println(&name[BASE_NAME_SIZE+2]);
   if (!sd.exists(name)) {
-    Serial.println(F("File does not exist"));
+    Serial.println("File does not exist");
     return;
   }
   binFile.close();
   strcpy(binName, name);
   if (!binFile.open(binName, O_RDONLY)) {
-    Serial.println(F("open failed"));
+    Serial.println("open failed");
     return;
   }
-  Serial.println(F("File opened"));
+  Serial.println("File opened");
 }
 //------------------------------------------------------------------------------
 void recordBinFile() {
@@ -379,9 +379,9 @@ void recordBinFile() {
   if (!sd.card()->writeStart(binFile.firstBlock())) {
     error("writeStart failed");
   }
-  Serial.print(F("FreeStack: "));
+  Serial.print("FreeStack: ");
   Serial.println(FreeStack());
-  Serial.println(F("Logging - type any character to stop"));
+  Serial.println("Logging - type any character to stop");
   bool closeFile = false;
   uint32_t bn = 0;
   uint32_t maxLatency = 0;
@@ -425,7 +425,7 @@ void recordBinFile() {
           digitalWrite(ERROR_LED_PIN, HIGH);
         }
 #if ABORT_ON_OVERRUN
-        Serial.println(F("Overrun abort"));
+        Serial.println("Overrun abort");
         break;
  #endif  // ABORT_ON_OVERRUN
       } else {
@@ -473,15 +473,15 @@ void recordBinFile() {
   if (!sd.card()->writeStop()) {
     error("writeStop failed");
   }
-  Serial.print(F("Min Free buffers: "));
+  Serial.print("Min Free buffers: ");
   Serial.println(minTop);
-  Serial.print(F("Max block write usec: "));
+  Serial.print("Max block write usec: ");
   Serial.println(maxLatency);
-  Serial.print(F("Overruns: "));
+  Serial.print("Overruns: ");
   Serial.println(overrunTotal);
   // Truncate file if recording stopped early.
   if (bn != FILE_BLOCK_COUNT) {
-    Serial.println(F("Truncating file"));
+    Serial.println("Truncating file");
     if (!binFile.truncate(512L * bn)) {
       error("Can't truncate file");
     }
@@ -496,7 +496,7 @@ void recoverTmpFile() {
   if (binFile.read(&count, 2) != 2 || count != DATA_DIM) {
     error("Please delete existing " TMP_FILE_NAME);
   }
-  Serial.println(F("\nRecovering data in tmp file " TMP_FILE_NAME));
+  Serial.println("\nRecovering data in tmp file " TMP_FILE_NAME);
   uint32_t bgnBlock = 0;
   uint32_t endBlock = binFile.fileSize()/512 - 1;
   // find last used block.
@@ -532,18 +532,18 @@ void renameBinFile() {
   if (!binFile.rename(binName)) {
     error("Can't rename file");
     }
-  Serial.print(F("File renamed: "));
+  Serial.print("File renamed: ");
   Serial.println(binName);
-  Serial.print(F("File size: "));
+  Serial.print("File size: ");
   Serial.print(binFile.fileSize()/512);
-  Serial.println(F(" blocks"));
+  Serial.println(" blocks");
 }
 //------------------------------------------------------------------------------
 void testSensor() {
   const uint32_t interval = 200000;
   int32_t diff;
   data_t data;
-  Serial.println(F("\nTesting - type any character to stop\n"));
+  Serial.println("\nTesting - type any character to stop\n");
   // Wait for Serial Idle.
   delay(1000);
   printHeader(&Serial);
@@ -568,9 +568,9 @@ void setup(void) {
   while (!Serial) {
     yield();
   }
-  Serial.print(F("\nFreeStack: "));
+  Serial.print("\nFreeStack: ");
   Serial.println(FreeStack());
-  Serial.print(F("Records/block: "));
+  Serial.print("Records/block: ");
   Serial.println(DATA_DIM);
   if (sizeof(block_t) != 512) {
     error("Invalid block size");
@@ -590,7 +590,7 @@ void setup(void) {
   }
   // recover existing tmp file.
   if (sd.exists(TMP_FILE_NAME)) {
-    Serial.println(F("\nType 'Y' to recover existing tmp file " TMP_FILE_NAME));
+    Serial.println("\nType 'Y' to recover existing tmp file " TMP_FILE_NAME);
     while (!Serial.available()) {
       yield();
     }
@@ -608,19 +608,19 @@ void loop(void) {
     delay(10);
   } while (Serial.available() && Serial.read() >= 0);
   Serial.println();
-  Serial.println(F("type:"));
-  Serial.println(F("b - open existing bin file"));
-  Serial.println(F("c - convert file to csv"));
-  Serial.println(F("d - dump data to Serial"));
-  Serial.println(F("e - overrun error details"));
-  Serial.println(F("l - list files"));
-  Serial.println(F("r - record data"));
-  Serial.println(F("t - test without logging"));
+  Serial.println("type:");
+  Serial.println("b - open existing bin file");
+  Serial.println("c - convert file to csv");
+  Serial.println("d - dump data to Serial");
+  Serial.println("e - overrun error details");
+  Serial.println("l - list files");
+  Serial.println("r - record data");
+  Serial.println("t - test without logging");
   while(!Serial.available()) {
     yield();
   }
 #if WDT_YIELD_TIME_MICROS
-  Serial.println(F("LowLatencyLogger can not run with watchdog timer"));
+  Serial.println("LowLatencyLogger can not run with watchdog timer");
   while (true) {}
 #endif
 
@@ -643,13 +643,13 @@ void loop(void) {
   } else if (c == 'e') {
     checkOverrun();
   } else if (c == 'l') {
-    Serial.println(F("\nls:"));
+    Serial.println("\nls:");
     sd.ls(&Serial, LS_SIZE);
   } else if (c == 'r') {
     logData();
   } else if (c == 't') {
     testSensor();
   } else {
-    Serial.println(F("Invalid entry"));
+    Serial.println("Invalid entry");
   }
 }

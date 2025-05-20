@@ -35,11 +35,11 @@ void setup() {
     yield();
   }
 
-  Serial.println(F("Type any character to start"));
+  Serial.println("Type any character to start");
   while (!Serial.available()) {
     yield();
   }
-  Serial.println(F("Starting test"));
+  Serial.println("Starting test");
 
   // Initialize at the highest speed supported by the board that is
   // not over 50 MHz. Try a lower speed if SPI errors occur.
@@ -55,7 +55,7 @@ void setup() {
     for (uint8_t fileType = 0; fileType < 2; fileType++) {
       if (!fileType) {
         if (!printFile.open("print.txt", O_RDWR | O_CREAT | O_TRUNC)) {
-          Serial.println(F("open fail"));
+          Serial.println("open fail");
           return;
         }
         printTime = millis();
@@ -102,7 +102,7 @@ void setup() {
 
       } else {
         if (!stdioFile.fopen("stream.txt", "w+")) {
-          Serial.println(F("fopen fail"));
+          Serial.println("fopen fail");
           return;
         }
         stdioTime = millis();
@@ -187,29 +187,29 @@ void setup() {
       stdioFile.rewind();
       for (uint32_t i = 0; i < stdioSize; i++) {
         if (printFile.read() != stdioFile.getc()) {
-          Serial.print(F("Files differ at pos: "));
+          Serial.print("Files differ at pos: ");
           Serial.println(i);
           return;
         }
       }
     }
 
-    Serial.print(F("fileSize: "));
+    Serial.print("fileSize: ");
     if (printSize != stdioSize) {
       Serial.print(printSize);
-      Serial.print(F(" != "));
+      Serial.print(" != ");
     }
     Serial.println(stdioSize);
-    Serial.print(F("print millis: "));
+    Serial.print("print millis: ");
     Serial.println(printTime);
-    Serial.print(F("stdio millis: "));
+    Serial.print("stdio millis: ");
     Serial.println(stdioTime);
-    Serial.print(F("ratio: "));
+    Serial.print("ratio: ");
     Serial.println((float)printTime/(float)stdioTime);
     Serial.println();
     printFile.close();
     stdioFile.fclose();
   }
-  Serial.println(F("Done"));
+  Serial.println("Done");
 }
 void loop() {}

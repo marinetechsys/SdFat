@@ -35,9 +35,9 @@ void setup() {
   }
   sd.ls(&Serial, LS_SIZE);
 
-  Serial.print(F("sdCsInit calls: "));
+  Serial.print("sdCsInit calls: ");
   Serial.println(initCalls);
-  Serial.print(F("sdCsWrite calls: "));
+  Serial.print("sdCsWrite calls: ");
   Serial.println(writeCalls);
 }
 //------------------------------------------------------------------------------

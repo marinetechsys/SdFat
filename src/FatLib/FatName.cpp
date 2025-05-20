@@ -35,7 +35,7 @@ uint16_t FatFile::getLfnChar(DirLfn_t* ldir, uint8_t i) {
   } else if (i < 13) {
     return getLe16(ldir->unicode3 + 2*i - 22);
   }
-  DBG_HALT_IF(i >= 13);
+  DBG_HALT_Ii >= 13;
   return 0;
 }
 //------------------------------------------------------------------------------

@@ -42,7 +42,7 @@ void loop() {
   } while (Serial.available() && Serial.read() >= 0);
 
   // F() stores strings in flash to save RAM
-  Serial.println(F("Type any character to start"));
+  Serial.println("Type any character to start");
   while (!Serial.available()) {
     yield();
   }
@@ -52,7 +52,7 @@ void loop() {
     error("begin");
   }
 
-  Serial.println(F("Starting print test.  Please wait.\n"));
+  Serial.println("Starting print test.  Please wait.\n");
 
   // do write test
   for (int test = 0; test < 2; test++) {
@@ -63,11 +63,11 @@ void loop() {
     }
     switch(test) {
     case 0:
-      Serial.println(F("Test of println(uint16_t)"));
+      Serial.println("Test of println(uint16_t"));
       break;
 
     case 1:
-      Serial.println(F("Test of println(double)"));
+      Serial.println("Test of println(double"));
       break;
     }
     maxLatency = 0;
@@ -102,24 +102,24 @@ void loop() {
     file.flush();
     t = millis() - t;
     double s = file.size();
-    Serial.print(F("Time "));
+    Serial.print("Time ");
     Serial.print(0.001*t);
-    Serial.println(F(" sec"));
-    Serial.print(F("File size "));
+    Serial.println(" sec");
+    Serial.print("File size ");
     Serial.print(0.001*s);
-    Serial.print(F(" KB\n"));
-    Serial.print(F("Write "));
+    Serial.print(" KB\n");
+    Serial.print("Write ");
     Serial.print(s/t);
-    Serial.print(F(" KB/sec\n"));
-    Serial.print(F("Maximum latency: "));
+    Serial.print(" KB/sec\n");
+    Serial.print("Maximum latency: ");
     Serial.print(maxLatency);
-    Serial.print(F(" usec, Minimum Latency: "));
+    Serial.print(" usec, Minimum Latency: ");
     Serial.print(minLatency);
-    Serial.print(F(" usec, Avg Latency: "));
+    Serial.print(" usec, Avg Latency: ");
     Serial.print(totalLatency/N_PRINT);
-    Serial.println(F(" usec\n"));
+    Serial.println(" usec\n");
     SD.remove("bench.txt");
   }
   file.close();
-  Serial.println(F("Done!\n"));
+  Serial.println("Done!\n");
 }

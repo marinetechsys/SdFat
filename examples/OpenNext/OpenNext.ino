@@ -56,7 +56,7 @@ FsFile file;
 #endif  // SD_FAT_TYPE
 //------------------------------------------------------------------------------
 // Store error strings in flash to save RAM.
-#define error(s) sd.errorHalt(&Serial, F(s))
+#define error(s) sd.errorHalt(&Serial, s)
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);

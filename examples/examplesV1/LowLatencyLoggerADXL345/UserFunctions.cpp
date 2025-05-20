@@ -66,5 +66,5 @@ void printData(Print* pr, data_t* data) {
 // Print data header.
 void printHeader(Print* pr) {
   startMicros = 0;
-  pr->println(F("micros,ax,ay,az"));
+  pr->println("micros,ax,ay,az");
 }

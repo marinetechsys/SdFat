@@ -41,7 +41,7 @@ uint32_t bgnBlock, endBlock;
 ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 // store error strings in flash to save RAM
-#define error(s) sd.errorHalt(F(s))
+#define error(s) sd.errorHalt(s)
 //------------------------------------------------------------------------------
 void setup(void) {
   Serial.begin(9600);
@@ -58,12 +58,12 @@ void loop(void) {
     delay(10);
   } while (Serial.available() && Serial.read() >= 0);
   // F stores strings in flash to save RAM
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }
 
-  cout << F("FreeStack: ") << FreeStack() << endl;
+  cout << "FreeStack: " << FreeStack() << endl;
 
   // Initialize at the highest speed supported by the board that is
   // not over 50 MHz. Try a lower speed if SPI errors occur.
@@ -98,9 +98,9 @@ void loop(void) {
     pCache[i + 63] = '\n';
   }
 
-  cout << F("Start raw write of ") << file.fileSize()/1000UL << F(" KB\n");
-  cout << F("Target rate: ") << RATE_KB_PER_SEC << F(" KB/sec\n");
-  cout << F("Target time: ") << TEST_TIME_SEC << F(" seconds\n");
+  cout << "Start raw write of " << file.fileSize()/1000UL << " KB\n";
+  cout << "Target rate: " << RATE_KB_PER_SEC << " KB/sec\n";
+  cout << "Target time: " << TEST_TIME_SEC << " seconds\n";
 
   // tell card to setup for multiple block write with pre-erase
   if (!sd.card()->writeStart(bgnBlock, BLOCK_COUNT)) {
@@ -129,7 +129,7 @@ void loop(void) {
     }
     if ((millis() - startTime - dotCount*DOT_TIME_MS) > DOT_TIME_MS) {
       if (maxQueueSize != maxQueuePrint) {
-        cout << F("\nQ: ") << maxQueueSize << endl;
+        cout << "\nQ: " << maxQueueSize << endl;
         maxQueuePrint = maxQueueSize;
       } else {
         cout << ".";
@@ -167,13 +167,13 @@ void loop(void) {
     error("writeStop failed");
   }
 
-  cout << F("\nDone\n");
-  cout << F("maxQueueSize: ") << maxQueueSize << endl;
-  cout << F("Elapsed time: ") << setprecision(3)<< 1.e-3*(endTime - startTime);
-  cout << F(" seconds\n");
-  cout << F("Min block write time: ") << minWriteTime << F(" micros\n");
-  cout << F("Max block write time: ") << maxWriteTime << F(" micros\n");
-  cout << F("Avg block write time: ") << avgWriteTime << F(" micros\n");
+  cout << "\nDone\n";
+  cout << "maxQueueSize: " << maxQueueSize << endl;
+  cout << "Elapsed time: " << setprecision(3)<< 1.e-3*(endTime - startTime);
+  cout << " seconds\n";
+  cout << "Min block write time: " << minWriteTime << " micros\n";
+  cout << "Max block write time: " << maxWriteTime << " micros\n";
+  cout << "Avg block write time: " << avgWriteTime << " micros\n";
   // close file for next pass of loop
   file.close();
   Serial.println();

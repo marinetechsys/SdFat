@@ -15,19 +15,19 @@ void setup() {
   while(!Serial) {
     yield();
   }
-  Serial.println(F("Type any character to start"));
+  Serial.println("Type any character to start");
   while (!Serial.available()) {
     yield();
   }
   // Initialize the SD.
   if (!SD.begin(csPin)) {
-    Serial.println(F("begin error"));
+    Serial.println("begin error");
     return;
   }
   // Create and open the file.  Use flag to truncate an existing file.
   file = SD.open("stream.txt", O_RDWR|O_CREAT|O_TRUNC);
   if (!file) {
-    Serial.println(F("open error"));
+    Serial.println("open error");
     return;
   }
   // Write a test number to the file.
@@ -36,7 +36,7 @@ void setup() {
   // Rewind the file and read the number with parseInt().
   file.seek(0);
   int i = file.parseInt();
-  Serial.print(F("parseInt: "));
+  Serial.print("parseInt: ");
   Serial.println(i);
   file.close();
 }

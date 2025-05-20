@@ -16,7 +16,7 @@ const uint8_t chipSelect = SS;
 ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 // store error strings in flash to save RAM
-#define error(s) sd.errorHalt(F(s))
+#define error(s) sd.errorHalt(s)
 //------------------------------------------------------------------------------
 /*
  * date/time values for debug
@@ -51,11 +51,11 @@ void dateTime(uint16_t* date, uint16_t* time) {
  * Function to print all timestamps.
  */
 void printTimestamps(SdFile& f) {
-  cout << F("Creation: ");
+  cout << "Creation: ";
   f.printCreateDateTime(&Serial);
-  cout << endl << F("Modify: ");
+  cout << endl << "Modify: ";
   f.printModifyDateTime(&Serial);
-  cout << endl << F("Access: ");
+  cout << endl << "Access: ";
   f.printAccessDateTime(&Serial);
   cout << endl;
 }
@@ -66,7 +66,7 @@ void setup(void) {
   while (!Serial) {
     yield();
   }
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }
@@ -85,7 +85,7 @@ void setup(void) {
   if (!file.open("default.txt", O_WRONLY | O_CREAT)) {
     error("open default.txt failed");
   }
-  cout << F("\nOpen with default times\n");
+  cout << "\nOpen with default times\n";
   printTimestamps(file);
 
   // close file
@@ -123,7 +123,7 @@ void setup(void) {
   // force dir update
   file.sync();
 
-  cout << F("\nTimes after write\n");
+  cout << "\nTimes after write\n";
   printTimestamps(file);
 
   // close file
@@ -152,11 +152,11 @@ void setup(void) {
   if (!file.timestamp(T_ACCESS, 2014, 11, 12, 7, 8, 9)) {
     error("set access time failed");
   }
-  cout << F("\nTimes after timestamp() calls\n");
+  cout << "\nTimes after timestamp( calls\n");
   printTimestamps(file);
 
   file.close();
-  cout << F("\nDone\n");
+  cout << "\nDone\n";
 }
 
 void loop() {}

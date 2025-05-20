@@ -41,7 +41,7 @@ void setup() {
     yield();
   }
   // F() stores strings in flash to save RAM
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }
@@ -56,7 +56,7 @@ void setup() {
   // append a line to the logfile
   logEvent("Another line for the logfile");
 
-  cout << F("Done - check /logs/2014/Jan/logfile.txt on the SD") << endl;
+  cout << "Done - check /logs/2014/Jan/logfile.txt on the SD" << endl;
 }
 //------------------------------------------------------------------------------
 void loop() {}

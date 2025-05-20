@@ -65,7 +65,7 @@ void benchmark() {
     fileName[5] = '0' + test;
     // open or create file - truncate existing file.
     if (!file.open(fileName, O_RDWR | O_CREAT | O_TRUNC)) {
-      sd.errorHalt(&Serial, F("open failed"));
+      sd.errorHalt(&Serial, "open failed");
     }
     if (test & 1) {
       bp.begin(&file);
@@ -73,42 +73,42 @@ void benchmark() {
     uint32_t t = millis();
     switch(test) {
     case 0:
-      Serial.println(F("Test of println(uint16_t)"));
+      Serial.println("Test of println(uint16_t"));
       for (uint16_t i = 0; i < N_PRINT; i++) {
         file.println(i);
       }
       break;
 
     case 1:
-      Serial.println(F("Test of printField(uint16_t, char)"));
+      Serial.println("Test of printField(uint16_t, char"));
       for (uint16_t i = 0; i < N_PRINT; i++) {
         bp.printField(i, '\n');
       }
       break;
 
     case 2:
-      Serial.println(F("Test of println(uint32_t)"));
+      Serial.println("Test of println(uint32_t"));
       for (uint16_t i = 0; i < N_PRINT; i++) {
         file.println(12345678UL + i);
       }
       break;
 
     case 3:
-      Serial.println(F("Test of printField(uint32_t, char)"));
+      Serial.println("Test of printField(uint32_t, char"));
       for (uint16_t i = 0; i < N_PRINT; i++) {
         bp.printField(12345678UL + i, '\n');
       }
       break;
 
     case 4:
-      Serial.println(F("Test of println(double)"));
+      Serial.println("Test of println(double"));
       for (uint16_t i = 0; i < N_PRINT; i++) {
         file.println((double)0.01*i);
       }
       break;
 
     case 5:
-      Serial.println(F("Test of printField(double, char)"));
+      Serial.println("Test of printField(double, char"));
       for (uint16_t i = 0; i < N_PRINT; i++) {
         bp.printField((double)0.01*i, '\n');
       }
@@ -119,20 +119,20 @@ void benchmark() {
       bp.sync();
     }
     if (file.getWriteError()) {
-      sd.errorHalt(&Serial, F("write failed"));
+      sd.errorHalt(&Serial, "write failed");
     }
     double s = file.fileSize();
     file.close();
     t = millis() - t;
-    Serial.print(F("Time "));
+    Serial.print("Time ");
     Serial.print(0.001*t, 3);
-    Serial.println(F(" sec"));
-    Serial.print(F("File size "));
+    Serial.println(" sec");
+    Serial.print("File size ");
     Serial.print(0.001*s);
-    Serial.println(F(" KB"));
-    Serial.print(F("Write "));
+    Serial.println(" KB");
+    Serial.print("Write ");
     Serial.print(s/t);
-    Serial.println(F(" KB/sec"));
+    Serial.println(" KB/sec");
     Serial.println();
   }
 }
@@ -164,7 +164,7 @@ void testMemberFunctions() {
   bp.println();
   bp.print("string");
   bp.println();
-  bp.print(F("flash"));
+  bp.print("flash");
   bp.println();
   bp.print(sc);
   bp.println();
@@ -187,7 +187,7 @@ void testMemberFunctions() {
   bp.println("Test println()");
   bp.println(c);
   bp.println("string");
-  bp.println(F("flash"));
+  bp.println("flash");
   bp.println(sc);
   bp.println(uc);
   bp.println(ss);
@@ -201,7 +201,7 @@ void testMemberFunctions() {
   bp.println("Test printField()");
   bp.printField(c, ',');
   bp.printField("string", ',');
-  bp.printField(F("flash"), ',');
+  bp.printField("flash", ',');
   bp.printField(sc, ',');
   bp.printField(uc, ',');
   bp.printField(ss, ',');
@@ -223,10 +223,10 @@ void setup() {
     sd.initErrorHalt(&Serial);
   }
   Serial.println();
-  Serial.println(F("Test member funcions:"));
+  Serial.println("Test member funcions:");
   testMemberFunctions();
   Serial.println();
-  Serial.println(F("Benchmark performance for uint16_t, uint32_t, and double:"));
+  Serial.println("Benchmark performance for uint16_t, uint32_t, and double:");
   benchmark();
   Serial.println("Done");
 }

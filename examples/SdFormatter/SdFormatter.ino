@@ -59,19 +59,19 @@ SdCardFactory cardFactory;
 // Pointer to generic SD card.
 SdCard* m_card = nullptr;
 //------------------------------------------------------------------------------
-#define sdError(msg) {cout << F("error: ") << F(msg) << endl; sdErrorHalt();}
+#define sdError(msg) {cout << "error: " << msg << endl; sdErrorHalt();}
 //------------------------------------------------------------------------------
 void sdErrorHalt() {
   if (!m_card) {
-    cout << F("Invalid SD_CONFIG") << endl;
+    cout << "Invalid SD_CONFIG" << endl;
   } else if (m_card->errorCode()) {
     if (m_card->errorCode() == SD_CARD_ERROR_CMD0) {
-      cout << F("No card, wrong chip select pin, or wiring error?") << endl;
+      cout << "No card, wrong chip select pin, or wiring error?" << endl;
     }
-    cout << F("SD errorCode: ") << hex << showbase;
+    cout << "SD errorCode: " << hex << showbase;
     printSdErrorSymbol(&Serial, m_card->errorCode());
-    cout << F(" = ") << int(m_card->errorCode()) << endl;
-    cout << F("SD errorData = ") << int(m_card->errorData()) << endl;
+    cout << " = " << int(m_card->errorCode()) << endl;
+    cout << "SD errorData = " << int(m_card->errorData()) << endl;
   }
   while (true) {}
 }
@@ -88,7 +88,7 @@ void clearSerialInput() {
 // flash erase all data
 uint32_t const ERASE_SIZE = 262144L;
 void eraseCard() {
-  cout << endl << F("Erasing\n");
+  cout << endl << "Erasing\n";
   uint32_t firstBlock = 0;
   uint32_t lastBlock;
   uint16_t n = 0;
@@ -113,9 +113,9 @@ void eraseCard() {
     sdError("readBlock");
   }
   cout << hex << showbase << setfill('0') << internal;
-  cout << F("All data set to ") << setw(4) << int(sectorBuffer[0]) << endl;
+  cout << "All data set to " << setw(4) << int(sectorBuffer[0]) << endl;
   cout << dec << noshowbase << setfill(' ') << right;
-  cout << F("Erase done\n");
+  cout << "Erase done\n";
 }
 //------------------------------------------------------------------------------
 void formatCard() {
@@ -130,27 +130,27 @@ void formatCard() {
   if (!rtn) {
     sdErrorHalt();
   }
-  cout << F("Run the SdInfo example for format details.") << endl;
+  cout << "Run the SdInfo example for format details." << endl;
 }
 //------------------------------------------------------------------------------
 void printConfig(SdSpiConfig config) {
   if (DISABLE_CS_PIN < 0) {
-    cout << F(
+    cout <<
            "\nAssuming the SD is the only SPI device.\n"
-           "Edit DISABLE_CS_PIN to disable an SPI device.\n");
+           "Edit DISABLE_CS_PIN to disable an SPI device.\n";
   } else {
-    cout << F("\nDisabling SPI device on pin ");
+    cout << "\nDisabling SPI device on pin ";
     cout << int(DISABLE_CS_PIN) << endl;
     pinMode(DISABLE_CS_PIN, OUTPUT);
     digitalWrite(DISABLE_CS_PIN, HIGH);
   }
-  cout << F("\nAssuming the SD chip select pin is: ") << int(config.csPin);
-  cout << F("\nEdit SD_CS_PIN to change the SD chip select pin.\n");
+  cout << "\nAssuming the SD chip select pin is: " << int(config.csPin);
+  cout << "\nEdit SD_CS_PIN to change the SD chip select pin.\n";
 }
 //------------------------------------------------------------------------------
 void printConfig(SdioConfig config) {
   (void)config;
-  cout << F("Assuming an SDIO interface.\n");
+  cout << "Assuming an SDIO interface.\n";
 }
 //------------------------------------------------------------------------------
 void setup() {
@@ -161,14 +161,14 @@ void setup() {
     yield();
   }
   printConfig(SD_CONFIG);
-  cout << F("\nType any character to start\n");
+  cout << "\nType any character to start\n";
   while (!Serial.available()) {
     yield();
   }
   // Discard any extra characters.
   clearSerialInput();
 
-  cout << F(
+  cout <<
          "\n"
          "This program can erase and/or format SD/SDHC/SDXC cards.\n"
          "\n"
@@ -176,7 +176,7 @@ void setup() {
          "Flash erase sets all data to 0X00 for most cards\n"
          "and 0XFF for a few vendor's cards.\n"
          "\n"
-         "Cards up to 2 GiB (GiB = 2^30 bytes) will be formated FAT16.\n"
+         "Cards up to 2 GiB (GiB = 2^30 bytes will be formated FAT16.\n"
          "Cards larger than 2 GiB and up to 32 GiB will be formatted\n"
          "FAT32. Cards larger than 32 GiB will be formatted exFAT.\n"
          "\n"
@@ -188,7 +188,7 @@ void setup() {
   c = Serial.read();
   cout << c << endl;
   if (c != 'Y') {
-    cout << F("Quiting, you did not enter 'Y'.\n");
+    cout << "Quiting, you did not enter 'Y'.\n";
     return;
   }
   // Read any existing Serial data.
@@ -207,24 +207,24 @@ void setup() {
     return;
   }
 
-  cout << F("\nCard size: ") << cardSectorCount*5.12e-7;
-  cout << F(" GB (GB = 1E9 bytes)\n");
-  cout << F("Card size: ") << cardSectorCount/2097152.0;
-  cout << F(" GiB (GiB = 2^30 bytes)\n");
+  cout << "\nCard size: " << cardSectorCount*5.12e-7;
+  cout << " GB (GB = 1E9 bytes\n");
+  cout << "Card size: " << cardSectorCount/2097152.0;
+  cout << " GiB (GiB = 2^30 bytes\n");
 
-  cout << F("Card will be formated ");
+  cout << "Card will be formated ";
   if (cardSectorCount > 67108864) {
-    cout << F("exFAT\n");
+    cout << "exFAT\n";
   } else if (cardSectorCount > 4194304) {
-    cout << F("FAT32\n");
+    cout << "FAT32\n";
   } else {
-    cout << F("FAT16\n");
+    cout << "FAT16\n";
   }
-  cout << F(
+  cout <<
          "\n"
          "Options are:\n"
          "E - erase the card and skip formatting.\n"
-         "F - erase and then format the card. (recommended)\n"
+         "F - erase and then format the card. (recommended\n"
          "Q - quick format the card without erase.\n"
          "\n"
          "Enter option: ");
@@ -235,7 +235,7 @@ void setup() {
   c = Serial.read();
   cout << c << endl;
   if (!strchr("EFQ", c)) {
-    cout << F("Quiting, invalid option entered.") << endl;
+    cout << "Quiting, invalid option entered." << endl;
     return;
   }
   if (c == 'E' || c == 'F') {

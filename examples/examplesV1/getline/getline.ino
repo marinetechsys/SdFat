@@ -22,12 +22,12 @@ ArduinoOutStream cout(Serial);
 void makeTestFile() {
   ofstream sdout("getline.txt");
   // use flash for text to save RAM
-  sdout << F(
+  sdout <<
           "short line\n"
           "\n"
           "17 character line\n"
           "too long for buffer\n"
-          "line with no nl");
+          "line with no nl";
 
   sdout.close();
 }
@@ -62,7 +62,7 @@ void setup(void) {
   }
 
   // F stores strings in flash to save RAM
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }

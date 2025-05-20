@@ -367,7 +367,7 @@ static void initClock() {
   CCM_CSCDR1 &= ~(CCM_CSCDR1_USDHC1_CLK_PODF_MASK);
   CCM_CSCMR1 |= CCM_CSCMR1_USDHC1_CLK_SEL;          // PLL2PFD0
 //  CCM_CSCDR1 |= CCM_CSCDR1_USDHC1_CLK_PODF((7)); / &0x7  WHG
-  CCM_CSCDR1 |= CCM_CSCDR1_USDHC1_CLK_PODF((1));
+  CCM_CSCDR1 |= CCM_CSCDR1_USDHC1_CLK_POD(1);
 }
 //------------------------------------------------------------------------------
 static uint32_t baseClock() {

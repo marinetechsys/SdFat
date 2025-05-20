@@ -28,8 +28,8 @@ const uint16_t NWRITE = FILE_SIZE/BUF_DIM;
 //------------------------------------------------------------------------------
 // print error msg, any SD error codes, and halt.
 // store messages in flash
-#define errorExit(msg) errorHalt(F(msg))
-#define initError(msg) initErrorHalt(F(msg))
+#define errorExit(msg) errorHalt(msg)
+#define initError(msg) initErrorHalt(msg)
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
@@ -42,10 +42,10 @@ void setup() {
     buf[i] = i;
   }
 
-  Serial.println(F("type any character to start"));
+  Serial.println("type any character to start");
   while (!Serial.available()) {
   }
-  Serial.print(F("FreeStack: "));
+  Serial.print("FreeStack: ");
   Serial.println(FreeStack());
 
   // initialize the first card
@@ -69,9 +69,9 @@ void setup() {
     }
   }
   // list root directory on both cards
-  Serial.println(F("------sd1 root-------"));
+  Serial.println("------sd1 root-------");
   sd1.ls();
-  Serial.println(F("------sd2 root-------"));
+  Serial.println("------sd2 root-------");
   sd2.ls();
 
   // make /Dir1 the default directory for sd1
@@ -95,11 +95,11 @@ void setup() {
     }
   }
   // list current directory on both cards
-  Serial.println(F("------sd1 Dir1-------"));
+  Serial.println("------sd1 Dir1-------");
   sd1.ls();
-  Serial.println(F("------sd2 Dir2-------"));
+  Serial.println("------sd2 Dir2-------");
   sd2.ls();
-  Serial.println(F("---------------------"));
+  Serial.println("---------------------");
 
   // set the current working directory for open() to sd1
   sd1.chvol();
@@ -109,7 +109,7 @@ void setup() {
   if (!file1.open("test.bin", O_RDWR | O_CREAT | O_TRUNC)) {
     sd1.errorExit("file1");
   }
-  Serial.println(F("Writing test.bin to sd1"));
+  Serial.println("Writing test.bin to sd1");
 
   // write data to /Dir1/test.bin on sd1
   for (uint16_t i = 0; i < NWRITE; i++) {
@@ -125,7 +125,7 @@ void setup() {
   if (!file2.open("copy.bin", O_WRONLY | O_CREAT | O_TRUNC)) {
     sd2.errorExit("file2");
   }
-  Serial.println(F("Copying test.bin to copy.bin"));
+  Serial.println("Copying test.bin to copy.bin");
 
   // copy file1 to file2
   file1.rewind();
@@ -144,32 +144,32 @@ void setup() {
     }
   }
   t = millis() - t;
-  Serial.print(F("File size: "));
+  Serial.print("File size: ");
   Serial.println(file2.fileSize());
-  Serial.print(F("Copy time: "));
+  Serial.print("Copy time: ");
   Serial.print(t);
-  Serial.println(F(" millis"));
+  Serial.println(" millis");
   // close test.bin
   file1.close();
   file2.close();
   // list current directory on both cards
-  Serial.println(F("------sd1 -------"));
+  Serial.println("------sd1 -------");
   sd1.ls("/", LS_R | LS_DATE | LS_SIZE);
-  Serial.println(F("------sd2 -------"));
+  Serial.println("------sd2 -------");
   sd2.ls("/", LS_R | LS_DATE | LS_SIZE);
-  Serial.println(F("---------------------"));
-  Serial.println(F("Renaming copy.bin"));
+  Serial.println("---------------------");
+  Serial.println("Renaming copy.bin");
   // rename the copy
   if (!sd2.rename("copy.bin", "rename.bin")) {
     sd2.errorExit("sd2.rename");
   }
   // list current directory on both cards
-  Serial.println(F("------sd1 -------"));
+  Serial.println("------sd1 -------");
   sd1.ls("/", LS_R | LS_DATE | LS_SIZE);
-  Serial.println(F("------sd2 -------"));
+  Serial.println("------sd2 -------");
   sd2.ls("/", LS_R | LS_DATE | LS_SIZE);
-  Serial.println(F("---------------------"));
-  Serial.println(F("Done"));
+  Serial.println("---------------------");
+  Serial.println("Done");
 }
 //------------------------------------------------------------------------------
 void loop() {}

@@ -100,11 +100,11 @@ void logRecord(data_t* data, uint16_t overrun) {
 void printRecord(Print* pr, data_t* data) {
   static uint32_t nr = 0;
   if (!data) {
-    pr->print(F("LOG_INTERVAL_USEC,"));
+    pr->print("LOG_INTERVAL_USEC,");
     pr->println(LOG_INTERVAL_USEC);
-    pr->print(F("rec#"));
+    pr->print("rec#");
     for (size_t i = 0; i < ADC_COUNT; i++) {
-      pr->print(F(",adc"));
+      pr->print(",adc");
       pr->print(i);
     }
     pr->println();
@@ -114,9 +114,9 @@ void printRecord(Print* pr, data_t* data) {
   if (data->adc[0] & 0X8000) {
     uint16_t n = data->adc[0] & 0X7FFF;
     nr += n;
-    pr->print(F("-1,"));
+    pr->print("-1,");
     pr->print(n);
-    pr->println(F(",overuns"));
+    pr->println(",overuns");
   } else {
     pr->print(nr++);
     for (size_t i = 0; i < ADC_COUNT; i++) {
@@ -181,7 +181,7 @@ void dateTime(uint16_t* date, uint16_t* time, uint8_t* ms10) {
 }
 #endif  // USE_RTC
 //------------------------------------------------------------------------------
-#define error(s) sd.errorHalt(&Serial, F(s))
+#define error(s) sd.errorHalt(&Serial, s)
 #define dbgAssert(e) ((e) ? (void)0 : error("assert " #e))
 //-----------------------------------------------------------------------------
 // Convert binary file to csv file.
@@ -220,9 +220,9 @@ void binaryToCsv() {
     }
   }
   csvFile.close();
-  Serial.print(F("Done: "));
+  Serial.print("Done: ");
   Serial.print(0.001*(millis() - t0));
-  Serial.println(F(" Seconds"));
+  Serial.println(" Seconds");
 }
 //------------------------------------------------------------------------------
 void clearSerialInput() {
@@ -261,15 +261,15 @@ void createBinFile() {
     error("preAllocate failed");
   }
 
-  Serial.print(F("preAllocated: "));
+  Serial.print("preAllocated: ");
   Serial.print(PREALLOCATE_SIZE_MiB);
-  Serial.println(F(" MiB"));
+  Serial.println(" MiB");
 }
 //-------------------------------------------------------------------------------
 bool createCsvFile() {
   char csvName[FILE_NAME_DIM];
   if (!binFile.isOpen()) {
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return false;
   }
 
@@ -284,9 +284,9 @@ bool createCsvFile() {
     error("open csvFile failed");
   }
   clearSerialInput();
-  Serial.print(F("Writing: "));
+  Serial.print("Writing: ");
   Serial.print(csvName);
-  Serial.println(F(" - type any character to stop"));
+  Serial.println(" - type any character to stop");
   return true;
 }
 //-------------------------------------------------------------------------------
@@ -312,7 +312,7 @@ void logData() {
     error("write first sector failed");
   }
   clearSerialInput();
-  Serial.println(F("Type any character to stop"));
+  Serial.println("Type any character to stop");
 
   // Wait until SD is not busy.
   while (sd.card()->isBusy()) {}
@@ -329,7 +329,7 @@ void logData() {
     // Wait until time to log data.
     delta = micros() - logTime;
     if (delta > 0) {
-      Serial.print(F("delta: "));
+      Serial.print("delta: ");
       Serial.println(delta);
       error("Rate too fast");
     }
@@ -391,56 +391,56 @@ void logData() {
       }
     }
   }
-  Serial.print(F("\nLog time: "));
+  Serial.print("\nLog time: ");
   Serial.print(0.001*(millis() - m));
-  Serial.println(F(" Seconds"));
+  Serial.println(" Seconds");
   binFile.truncate();
   binFile.sync();
   Serial.print(("File size: "));
   // Warning cast used for print since fileSize is uint64_t.
   Serial.print((uint32_t)binFile.fileSize());
-  Serial.println(F(" bytes"));
-  Serial.print(F("totalOverrun: "));
+  Serial.println(" bytes");
+  Serial.print("totalOverrun: ");
   Serial.println(totalOverrun);
-  Serial.print(F("FIFO_DIM: "));
+  Serial.print("FIFO_DIM: ");
   Serial.println(FIFO_DIM);
-  Serial.print(F("maxFifoUse: "));
+  Serial.print("maxFifoUse: ");
   Serial.println(maxFifoUse);
-  Serial.print(F("maxLogMicros: "));
+  Serial.print("maxLogMicros: ");
   Serial.println(maxLogMicros);
-  Serial.print(F("maxWriteMicros: "));
+  Serial.print("maxWriteMicros: ");
   Serial.println(maxWriteMicros);
-  Serial.print(F("Log interval: "));
+  Serial.print("Log interval: ");
   Serial.print(LOG_INTERVAL_USEC);
-  Serial.print(F(" micros\nmaxDelta: "));
+  Serial.print(" micros\nmaxDelta: ");
   Serial.print(maxDelta);
-  Serial.println(F(" micros"));
+  Serial.println(" micros");
 }
 //------------------------------------------------------------------------------
 void openBinFile() {
   char name[FILE_NAME_DIM];
   clearSerialInput();
-  Serial.println(F("Enter file name"));
+  Serial.println("Enter file name");
   if (!serialReadLine(name, sizeof(name))) {
     return;
   }
   if (!sd.exists(name)) {
     Serial.println(name);
-    Serial.println(F("File does not exist"));
+    Serial.println("File does not exist");
     return;
   }
   binFile.close();
   if (!binFile.open(name, O_RDONLY)) {
     Serial.println(name);
-    Serial.println(F("open failed"));
+    Serial.println("open failed");
     return;
   }
-  Serial.println(F("File opened"));
+  Serial.println("File opened");
 }
 //-----------------------------------------------------------------------------
 void printData() {
   if (!binFile.isOpen()) {
-    Serial.println(F("No current binary file"));
+    Serial.println("No current binary file");
     return;
   }
   // Skip first dummy sector.
@@ -448,7 +448,7 @@ void printData() {
     error("seek failed");
   }
   clearSerialInput();
-  Serial.println(F("type any character to stop\n"));
+  Serial.println("type any character to stop\n");
   delay(1000);
   printRecord(&Serial, nullptr);
   while (binFile.available() && !Serial.available()) {
@@ -462,7 +462,7 @@ void printData() {
 //------------------------------------------------------------------------------
 void printUnusedStack() {
 #if HAS_UNUSED_STACK
-  Serial.print(F("\nUnused stack: "));
+  Serial.print("\nUnused stack: ");
   Serial.println(UnusedStack());
 #endif  // HAS_UNUSED_STACK
 }
@@ -477,7 +477,7 @@ bool serialReadLine(char* str, size_t size) {
     if (c < ' ') break;
     str[n++] = c;
     if (n >= size) {
-      Serial.println(F("input too long"));
+      Serial.println("input too long");
       return false;
     }
     uint32_t m = millis();
@@ -493,7 +493,7 @@ void testSensor() {
   int32_t diff;
   data_t data;
   clearSerialInput();
-  Serial.println(F("\nTesting - type any character to stop\n"));
+  Serial.println("\nTesting - type any character to stop\n");
   delay(1000);
   printRecord(&Serial, nullptr);
   uint32_t m = micros();
@@ -519,19 +519,19 @@ void setup() {
     yield();
   }
   delay(1000);
-  Serial.println(F("Type any character to begin"));
+  Serial.println("Type any character to begin");
   while (!Serial.available()) {
     yield();
   }
   FillStack();
 #if !ENABLE_DEDICATED_SPI
-  Serial.println(F(
+  Serial.println(
     "\nFor best performance edit SdFatConfig.h\n"
-    "and set ENABLE_DEDICATED_SPI nonzero"));
+    "and set ENABLE_DEDICATED_SPI nonzero");
 #endif  // !ENABLE_DEDICATED_SPI
 
   Serial.print(FIFO_DIM);
-  Serial.println(F(" FIFO entries will be used."));
+  Serial.println(" FIFO entries will be used.");
 
   // Initialize SD.
   if (!sd.begin(SD_CONFIG)) {
@@ -560,13 +560,13 @@ void loop() {
     digitalWrite(ERROR_LED_PIN, LOW);
   }
   Serial.println();
-  Serial.println(F("type: "));
-  Serial.println(F("b - open existing bin file"));
-  Serial.println(F("c - convert file to csv"));
-  Serial.println(F("l - list files"));
-  Serial.println(F("p - print data to Serial"));
-  Serial.println(F("r - record data"));
-  Serial.println(F("t - test without logging"));
+  Serial.println("type: ");
+  Serial.println("b - open existing bin file");
+  Serial.println("c - convert file to csv");
+  Serial.println("l - list files");
+  Serial.println("p - print data to Serial");
+  Serial.println("r - record data");
+  Serial.println("t - test without logging");
   while(!Serial.available()) {
     yield();
   }
@@ -580,7 +580,7 @@ void loop() {
       binaryToCsv();
     }
   } else if (c == 'l') {
-    Serial.println(F("ls:"));
+    Serial.println("ls:");
     sd.ls(&Serial, LS_DATE | LS_SIZE);
   } else if (c == 'p') {
     printData();
@@ -590,6 +590,6 @@ void loop() {
   } else if (c == 't') {
     testSensor();
   } else {
-    Serial.println(F("Invalid entry"));
+    Serial.println("Invalid entry");
   }
 }

@@ -30,7 +30,7 @@ char buf[80];
 #endif  // SENSOR_COUNT
 //------------------------------------------------------------------------------
 // store error strings in flash to save RAM
-#define error(s) sd.errorHalt(F(s))
+#define error(s) sd.errorHalt(s)
 //------------------------------------------------------------------------------
 #if USE_DS1307
 // use RTClib from Adafruit
@@ -72,10 +72,10 @@ void setup() {
     yield();
   }
   // F() stores strings in flash to save RAM
-  cout << endl << F("FreeStack: ") << FreeStack() << endl;
+  cout << endl << "FreeStack: " << FreeStack() << endl;
 
 #if WAIT_TO_START
-  cout << F("Type any character to start\n");
+  cout << "Type any character to start\n";
   while (!Serial.available()) {
     yield();
   }
@@ -120,20 +120,20 @@ void setup() {
     error("file.open");
   }
 
-  cout << F("Logging to: ") << name << endl;
-  cout << F("Type any character to stop\n\n");
+  cout << "Logging to: " << name << endl;
+  cout << "Type any character to stop\n\n";
 
   // format header in buffer
   obufstream bout(buf, sizeof(buf));
 
-  bout << F("millis");
+  bout << "millis";
 
 #if USE_DS1307
-  bout << F(",date,time");
+  bout << ",date,time";
 #endif  // USE_DS1307
 
   for (uint8_t i = 0; i < SENSOR_COUNT; i++) {
-    bout << F(",sens") << int(i);
+    bout << ",sens" << int(i);
   }
   logfile << buf << endl;
 
@@ -192,6 +192,6 @@ void loop() {
     return;
   }
   logfile.close();
-  cout << F("Done!");
+  cout << "Done!";
   while (true) {}
 }

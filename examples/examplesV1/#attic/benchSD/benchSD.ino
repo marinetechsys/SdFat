@@ -45,7 +45,7 @@ void loop() {
   } while (Serial.available() && Serial.read() >= 0);
 
   // F() stores strings in flash to save RAM
-  Serial.println(F("Type any character to start"));
+  Serial.println("Type any character to start");
 
   while (!Serial.available()) {
     yield();
@@ -67,13 +67,13 @@ void loop() {
   buf[BUF_SIZE-2] = '\r';
   buf[BUF_SIZE-1] = '\n';
 
-  Serial.print(F("File size "));
+  Serial.print("File size ");
   Serial.print(FILE_SIZE_MB);
-  Serial.println(F("MB"));
-  Serial.print(F("Buffer size "));
+  Serial.println("MB");
+  Serial.print("Buffer size ");
   Serial.print(BUF_SIZE);
-  Serial.println(F(" bytes"));
-  Serial.println(F("Starting write test.  Please wait up to a minute"));
+  Serial.println(" bytes");
+  Serial.println("Starting write test.  Please wait up to a minute");
 
   // do write test
   uint32_t n = FILE_SIZE/sizeof(buf);
@@ -98,17 +98,17 @@ void loop() {
   file.flush();
   t = millis() - t;
   double s = file.size();
-  Serial.print(F("Write "));
+  Serial.print("Write ");
   Serial.print(s/t);
-  Serial.print(F(" KB/sec\n"));
-  Serial.print(F("Maximum latency: "));
+  Serial.print(" KB/sec\n");
+  Serial.print("Maximum latency: ");
   Serial.print(maxLatency);
-  Serial.print(F(" usec, Minimum Latency: "));
+  Serial.print(" usec, Minimum Latency: ");
   Serial.print(minLatency);
-  Serial.print(F(" usec, Avg Latency: "));
+  Serial.print(" usec, Avg Latency: ");
   Serial.print(totalLatency/n);
-  Serial.print(F(" usec\n\n"));
-  Serial.println(F("Starting read test.  Please wait up to a minute"));
+  Serial.print(" usec\n\n");
+  Serial.println("Starting read test.  Please wait up to a minute");
   // do read test
   file.seek(0);
   maxLatency = 0;
@@ -134,16 +134,16 @@ void loop() {
     }
   }
   t = millis() - t;
-  Serial.print(F("Read "));
+  Serial.print("Read ");
   Serial.print(s/t);
-  Serial.print(F(" KB/sec\n"));
-  Serial.print(F("Maximum latency: "));
+  Serial.print(" KB/sec\n");
+  Serial.print("Maximum latency: ");
   Serial.print(maxLatency);
-  Serial.print(F(" usec, Minimum Latency: "));
+  Serial.print(" usec, Minimum Latency: ");
   Serial.print(minLatency);
-  Serial.print(F(" usec, Avg Latency: "));
+  Serial.print(" usec, Avg Latency: ");
   Serial.print(totalLatency/n);
-  Serial.print(F(" usec\n\n"));
-  Serial.print(F("Done\n\n"));
+  Serial.print(" usec\n\n");
+  Serial.print("Done\n\n");
   file.close();
 }
