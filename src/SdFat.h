@@ -233,7 +233,7 @@ class SdBase : public Vol {
    * \param[in] pr Print destination.
    */
   void initErrorPrint(print_t* pr) {
-    pr->println("begin( failed"));
+    pr->println("begin() failed");
     if (sdErrorCode()) {
       pr->println("Do not reformat the SD.");
       if (sdErrorCode() == SD_CARD_ERROR_CMD0) {
